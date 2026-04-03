@@ -17,8 +17,6 @@ const Pino_logger = pino({
       debug: 20,
       trace: 10,
     },
-
-  
   },
 });
 

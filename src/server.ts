@@ -1,5 +1,5 @@
 import express from "express";
-import morgan from 'morgan'
+import morgan from "morgan";
 import { config } from "dotenv";
 config();
 import helmet from "helmet";
@@ -27,8 +27,6 @@ app.use(express.json());
 app.use(limiter);
 
 const PORT = process.env.PORT || 3000;
-
-
 
 app.get("/", (req: express.Request, res: express.Response) => {
   SendResponse.SuccessResponse(res, null, "Welcome to CommDesk API");
