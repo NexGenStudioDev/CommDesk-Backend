@@ -9,7 +9,6 @@
     "start": "ts-node-dev --respawn --transpile-only src/server.ts",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
     "lint": "eslint ./src/**/.ts"
-     
   },
   "keywords": [],
   "author": "",
@@ -21,6 +20,7 @@
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "pino": "^10.3.1",
+    "pino-http": "^11.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
