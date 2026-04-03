@@ -17,18 +17,8 @@ const Pino_logger = pino({
       debug: 20,
       trace: 10,
     },
-    targets: [
-      {
-        level: "info",
-        target: "pino/file",
-        options: { destination: "logs/info.log" },
-      },
-      {
-        level: "error",
-        target: "pino/file",
-        options: { destination: "logs/error.log" },
-      },
-    ],
+
+  
   },
 });
 

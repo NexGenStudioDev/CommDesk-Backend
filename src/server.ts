@@ -1,10 +1,12 @@
 import express from "express";
+import morgan from 'morgan'
 import { config } from "dotenv";
 config();
 import helmet from "helmet";
 
 import rateLimit from "express-rate-limit";
 import SendResponse from "./utils/SendResponse";
+import Pino_logger from "./core/logger/pino";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -18,12 +20,15 @@ const limiter = rateLimit({
 const app = express();
 
 app.use(helmet());
+app.use(morgan("dev"));
 
 app.use(express.json());
 
 app.use(limiter);
 
 const PORT = process.env.PORT || 3000;
+
+
 
 app.get("/", (req: express.Request, res: express.Response) => {
   SendResponse.SuccessResponse(res, null, "Welcome to CommDesk API");
