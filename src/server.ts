@@ -9,10 +9,14 @@ import SendResponse from "./utils/SendResponse";
 import Pino_logger from "./core/logger/pino";
 import { env_Constant } from "./constants/env.constant";
 import { connectDB } from "./config/db.config";
+import { date } from "zod";
+
+const isProduction = env_Constant.NODE_ENV === "production";
+const isTest = env_Constant.NODE_ENV === "test";
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  limit: 100, // Limit each IP to 100 requests per window
+  windowMs: 15 * 60 * 1000, // Limit requests per 15 minutes
+  limit: isProduction ? 100 : 1000, // Limit each IP to 100 requests per windowMs in production, 1000 in development
   standardHeaders: "draft-8", // Returns rate limit info in headers
   legacyHeaders: false,
 });
@@ -22,7 +26,32 @@ const limiter = rateLimit({
 const app = express();
 
 app.use(helmet());
-app.use(morgan("dev"));
+
+app.set("trust proxy", true);
+
+app.use(
+  morgan(
+    (tokens, req, res) => {
+      return JSON.stringify({
+        method: tokens.method(req, res),
+        date: tokens.date(req, res, "iso"),
+        url: tokens.url(req, res),
+        status: Number(tokens.status(req, res)),
+        responseTime: Number(tokens["response-time"](req, res)),
+        contentLength: tokens.res(req, res, "content-length") || 0,
+        ip: req.ip,
+      });
+    },
+    {
+      skip: () => isTest,
+      stream: {
+        write: (message: string) => {
+          Pino_logger.info(JSON.parse(message));
+        },
+      },
+    },
+  ),
+);
 
 app.use(express.json());
 
@@ -34,7 +63,17 @@ app.get("/", (req: express.Request, res: express.Response) => {
   SendResponse.SuccessResponse(res, null, "Welcome to CommDesk API");
 });
 
-app.listen(PORT, async () => {
-  await connectDB();
-  console.log(`Server is running on port ${PORT}`);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server", error);
+    process.exit(1);
+  }
+};
+
+startServer();
