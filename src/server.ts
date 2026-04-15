@@ -21,25 +21,27 @@ const limiter = rateLimit({
   legacyHeaders: false,
 });
 
-// src/utils/SendResponse.ts
+
 
 const app = express();
 
-app.use(helmet());
+app.set("trust proxy", 1);
 
-app.set("trust proxy", true);
+
+
+app.use(helmet());
 
 app.use(
   morgan(
     (tokens, req, res) => {
       return JSON.stringify({
-        method: tokens.method(req, res),
-        date: tokens.date(req, res, "iso"),
         url: tokens.url(req, res),
-        status: Number(tokens.status(req, res)),
+        method: tokens.method(req, res),
+        ip: req.ip,
+        date: tokens.date(req, res, "iso"),
         responseTime: Number(tokens["response-time"](req, res)),
         contentLength: tokens.res(req, res, "content-length") || 0,
-        ip: req.ip,
+        status: Number(tokens.status(req, res)),
       });
     },
     {
