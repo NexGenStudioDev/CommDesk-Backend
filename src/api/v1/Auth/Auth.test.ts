@@ -142,15 +142,14 @@ describe("Create User Account with (Auth Service) functions", () => {
   });
 });
 
-
 describe("Find User by ID (Auth Utils)", () => {
-   test("Find Organization User by ID", async () => {
-     const user = await authUtils.getUserById(OrganizationId);
-     console.log("Found User:", user);
-     expect(user).toBeDefined();
-     expect(user?._id.toString()).toBe(OrganizationId);
-     expect(user?.email).toBe("gdg.ranchi@example.com");
-   });
+  test("Find Organization User by ID", async () => {
+    const user = await authUtils.getUserById(OrganizationId);
+    console.log("Found User:", user);
+    expect(user).toBeDefined();
+    expect(user?._id.toString()).toBe(OrganizationId);
+    expect(user?.email).toBe("gdg.ranchi@example.com");
+  });
 });
 
 // describe("Check Auth API Endpoints", () => {
