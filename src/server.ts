@@ -7,6 +7,8 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import SendResponse from "./utils/SendResponse";
 import Pino_logger from "./core/logger/pino";
+import { env_Constant } from "./constants/env.constant";
+import { connectDB } from "./config/db.config";
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -26,12 +28,13 @@ app.use(express.json());
 
 app.use(limiter);
 
-const PORT = process.env.PORT || 3000;
+const PORT = env_Constant.PORT || 3000;
 
 app.get("/", (req: express.Request, res: express.Response) => {
   SendResponse.SuccessResponse(res, null, "Welcome to CommDesk API");
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
+  await connectDB();
   console.log(`Server is running on port ${PORT}`);
 });

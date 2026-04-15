@@ -9,51 +9,28 @@ import {
   test,
   jest,
 } from "@jest/globals";
-import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
 
 import { ROLE_CONSTANT } from "./Auth.Constant";
 import { authService } from "./Auth.Service";
-
-let mongo: MongoMemoryServer;
+import { connectDB, disconnectDB } from "../../../config/db.config";
+import mongoose from "mongoose";
 
 // ✅ Increase timeout (DB + async ops need time)
 jest.setTimeout(30000);
 
 beforeAll(async () => {
   try {
-    mongo = await MongoMemoryServer.create({
-      binary: { version: "6.0.14" }, // ✅ stable version
-    });
-
-    const uri = mongo.getUri();
-    await mongoose.connect(uri);
+    await connectDB();
   } catch (err) {
     console.error("Mongo setup failed:", err);
     throw err;
   }
 });
 
-afterEach(async () => {
-  const collections = mongoose.connection.collections;
-
-  // ✅ Fast parallel cleanup
-  await Promise.all(
-    Object.values(collections).map((collection) =>
-      collection.deleteMany({})
-    )
-  );
-});
-
 afterAll(async () => {
-  await mongoose.connection.close();
-
-  // ✅ Safe teardown
-  if (mongo) {
-    await mongo.stop();
-  }
+  await mongoose.connection.dropDatabase();
+  await disconnectDB();
 });
-
 
 // ================== TESTS ==================
 
@@ -83,10 +60,25 @@ describe("Check Auth Model", () => {
       },
       { name: "emailVerified", type: Boolean, default: false },
       { name: "failedLoginAttempts", type: Number, default: 0 },
-      { name: "ParticipantId", type: "ObjectId", ref: "Participant", required: true },
-      { name: "OrganizationId", type: "ObjectId", ref: "Organization", required: true },
+      {
+        name: "ParticipantId",
+        type: "ObjectId",
+        ref: "Participant",
+        required: true,
+      },
+      {
+        name: "OrganizationId",
+        type: "ObjectId",
+        ref: "Organization",
+        required: true,
+      },
       { name: "JudgeId", type: "ObjectId", ref: "Judge", required: true },
-      { name: "Permissions", type: "ObjectId", ref: "Permission", required: true },
+      {
+        name: "Permissions",
+        type: "ObjectId",
+        ref: "Permission",
+        required: true,
+      },
       { name: "isBanned", type: Boolean, default: false },
     ];
 
@@ -120,24 +112,24 @@ describe("Check Mandatory Functions", () => {
   });
 });
 
-describe("Check Auth API Endpoints", () => {
-  test("Create Super Admin Account", async () => {});
+// describe("Check Auth API Endpoints", () => {
+//   test("Create Super Admin Account", async () => {});
 
-  test("Create Participant Account", async () => {});
+//   test("Create Participant Account", async () => {});
 
-  test("Create Judge Account", async () => {});
+//   test("Create Judge Account", async () => {});
 
-  test("Create Organization Account", async () => {});
+//   test("Create Organization Account", async () => {});
 
-  test("Create Mentor Account", async () => {});
+//   test("Create Mentor Account", async () => {});
 
-  test("Login with Valid Credentials", async () => {});
+//   test("Login with Valid Credentials", async () => {});
 
-  test("Login with Invalid Credentials", async () => {});
+//   test("Login with Invalid Credentials", async () => {});
 
-  test("Access Protected Route with Valid Token", async () => {});
+//   test("Access Protected Route with Valid Token", async () => {});
 
-  test("Access Protected Route with Invalid Token", async () => {});
+//   test("Access Protected Route with Invalid Token", async () => {});
 
-  test("Access Protected Route with Expired Token", async () => {});
-});
+//   test("Access Protected Route with Expired Token", async () => {});
+// });
