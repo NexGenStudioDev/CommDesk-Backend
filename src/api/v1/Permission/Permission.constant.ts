@@ -46,6 +46,30 @@ export const Mentor_Permissions = {
   UPDATE_MENTORS: "mentor:update",
 };
 
+export const Default_Participant_Permissions: PermissionSchemaType[] = [
+  {
+    name: "View Event",
+    action: "read",
+    resource: Event_Permissions.VIEW_EVENT,
+    description: "Permission to view events",
+    userId: null,
+  },
+  {
+    name: "Join Event",
+    action: "update",
+    resource: Event_Permissions.JOIN_EVENT,
+    description: "Permission to join events",
+    userId: null,
+  },
+  {
+    name: "Leave Event",
+    action: "update",
+    resource: Event_Permissions.LEAVE_EVENT,
+    description: "Permission to leave events",
+    userId: null,
+  },
+];
+
 export const Default_Organization_Permissions: PermissionSchemaType[] = [
   {
     name: "Create Event",

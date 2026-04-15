@@ -14,6 +14,8 @@ import { ROLE_CONSTANT } from "./Auth.Constant";
 import { authService } from "./Auth.Service";
 import { connectDB, disconnectDB } from "../../../config/db.config";
 import mongoose from "mongoose";
+import { AuthType } from "./Auth.type";
+import { authUtils } from "./Auth.Utils";
 
 // ✅ Increase timeout (DB + async ops need time)
 jest.setTimeout(30000);
@@ -31,6 +33,9 @@ afterAll(async () => {
   await mongoose.connection.dropDatabase();
   await disconnectDB();
 });
+
+// Global variables for tests
+let OrganizationId: string;
 
 // ================== TESTS ==================
 
@@ -110,6 +115,42 @@ describe("Check Mandatory Functions", () => {
     expect(authService).toHaveProperty("createUser");
     expect(typeof authService.createUser).toBe("function");
   });
+});
+
+describe("Create User Account with (Auth Service) functions", () => {
+  test("Check Organization Account Creation", async () => {
+    const userData: AuthType = {
+      firstName: "GDG",
+      lastName: "Ranchi",
+      email: "gdg.ranchi@example.com",
+      password: "gdgranchi@123",
+      role: ROLE_CONSTANT.ORGANIZATION,
+      emailVerified: false,
+      isBanned: false,
+      failedLoginAttempts: 0,
+    };
+
+    const createdUser = await authService.createUser(userData);
+    console.log("Created User:", createdUser);
+    OrganizationId = createdUser._id.toString();
+    expect(createdUser).toBeDefined();
+    expect(createdUser).toHaveProperty("_id");
+    expect(createdUser.firstName).toBe(userData.firstName);
+    expect(createdUser.lastName).toBe(userData.lastName);
+    expect(createdUser.email).toBe(userData.email);
+    expect(createdUser.role).toBe(userData.role);
+  });
+});
+
+
+describe("Find User by ID (Auth Utils)", () => {
+   test("Find Organization User by ID", async () => {
+     const user = await authUtils.getUserById(OrganizationId);
+     console.log("Found User:", user);
+     expect(user).toBeDefined();
+     expect(user?._id.toString()).toBe(OrganizationId);
+     expect(user?.email).toBe("gdg.ranchi@example.com");
+   });
 });
 
 // describe("Check Auth API Endpoints", () => {

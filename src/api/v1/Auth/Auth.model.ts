@@ -31,7 +31,6 @@ let AuthSchema = new mongoose.Schema(
     Permissions: {
       type: mongoose.Schema.ObjectId,
       ref: "Permission",
-      required: true,
     },
     isBanned: { type: Boolean, default: false },
   },

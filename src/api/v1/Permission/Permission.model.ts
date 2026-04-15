@@ -5,7 +5,7 @@ export type PermissionSchemaType = {
   action: "create" | "read" | "update" | "delete"; // create, read, update, delete
   resource: string; // create event , read event, update event, delete event
   description?: string;
-  userId: mongoose.Schema.Types.ObjectId | null; // Reference to the user who created the permission
+  userId: string | null; // Reference to the user who created the permission
 };
 
 const permissionSchema = new mongoose.Schema<PermissionSchemaType>(

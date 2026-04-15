@@ -11,6 +11,6 @@ export type AuthType = {
   ParticipantId?: mongoose.Types.ObjectId;
   OrganizationId?: mongoose.Types.ObjectId;
   JudgeId?: mongoose.Types.ObjectId;
-  Permissions: mongoose.Types.ObjectId;
+  Permissions?: mongoose.Types.ObjectId;
   isBanned: boolean;
 };
