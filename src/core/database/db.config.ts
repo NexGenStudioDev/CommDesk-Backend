@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
-import { env_Constant } from "../constants/env.constant";
+import { env_Constant } from "../../constants/env.constant";
 
 let mongo: MongoMemoryServer | null = null;
 

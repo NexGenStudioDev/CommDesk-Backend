@@ -598,8 +598,6 @@ Auth.findOne({ email });
 
 # 🔥 CORE FLOW (STEP BY STEP)
 
-
-
 ## 🟢 STEP 1: Validate Input
 
 - Zod validation
@@ -933,130 +931,485 @@ Response
 
 ---
 
-# 🧑‍💻 Participant (Builder System)
+# 🧑‍💻 Participant (Builder) Creation — A→Z Production Doc (CommDesk)
 
-## BuilderProfile
+> This defines the **complete creation + lifecycle of a Participant (Builder)**
+> aligned with your flow:
+
+```txt
+Discover → Apply → Join Team → Build → Submit → Get Judged → Earn Reputation → Get Hired
+```
+
+👉 This is **NOT just profile creation**
+👉 This is the **foundation of your entire ecosystem (events, hackathons, workshops, hiring)**
+
+# 🚀 CORE IDEA
+
+```txt
+Auth → User → Member → BuilderProfile → BuilderStats
+```
+
+👉 Participant = **Member with role PARTICIPANT + BuilderProfile**
+
+---
+
+# 📦 ENTITY OVERVIEW
+
+---
+
+## 1. Member (already created)
+
+```ts
+primaryRole: "PARTICIPANT";
+membershipStatus: "ACTIVE";
+```
+
+---
+
+## 2. BuilderProfile (MAIN ENTITY)
+
+```ts
+BuilderProfile {
+  userId: ObjectId
+  communityId: ObjectId | null   // null = global profile
+
+  username: String  // unique slug
+
+  fullName: String
+  avatarUrl: String
+  bio: String
+  location: String
+
+  university: String
+  degree: String
+  graduationYear: Number
+
+  experienceLevel: "Student" | "Junior" | "Mid" | "Senior"
+
+  githubUrl: String
+  linkedinUrl: String
+  portfolioUrl: String
+  xTwitterUrl: String
+  resumeUrl: String
+
+  skills: [String]
+  preferredTracks: [String]
+
+  openToTeamInvite: Boolean
+  openToHiring: Boolean
+
+  visibility: "Public" | "MembersOnly" | "Private"
+
+  builderStatsId: ObjectId
+  waitlistEntryId: ObjectId
+
+  createdAt: Date
+  updatedAt: Date
+}
+```
+
+---
+
+## 3. BuilderStats (ASYNC ENGINE)
+
+```ts
+BuilderStats {
+  userId: ObjectId
+
+  hackathonsJoined: Number
+  projectsSubmitted: Number
+  wins: Number
+  finalistCount: Number
+  averageScore: Number
+  reputationPoints: Number
+
+  followers: Number
+  following: Number
+
+  updatedAt: Date
+}
+```
+
+---
+
+# 🚀 PARTICIPANT CREATION ENTRY POINT
+
+---
+
+## Endpoint
+
+```http
+POST /api/v1/participants/create-profile
+```
+
+---
+
+# 📥 REQUEST BODY
+
+```json
+{
+  "username": "abhishek-dev",
+  "fullName": "Abhishek Gupta",
+  "bio": "Full-stack developer",
+
+  "location": "India",
+
+  "university": "XYZ University",
+  "degree": "BCA",
+  "graduationYear": 2026,
+  "experienceLevel": "Student",
+
+  "githubUrl": "https://github.com/...",
+  "linkedinUrl": "https://linkedin.com/...",
+  "portfolioUrl": "https://portfolio.com",
+
+  "skills": ["React", "Node", "MongoDB"],
+  "preferredTracks": ["Web3", "AI"],
+
+  "openToTeamInvite": true,
+  "openToHiring": true,
+
+  "visibility": "Public"
+}
+```
+
+---
+
+# 🔍 VALIDATION RULES
+
+---
+
+## username
+
+- required
+- unique globally
+- URL-safe slug
+- lowercase only
+
+---
+
+## fullName
+
+- required
+- min 3 chars
+
+---
+
+## experienceLevel
+
+```ts
+"Student" | "Junior" | "Mid" | "Senior";
+```
+
+---
+
+## skills
+
+- max 30
+- normalized (lowercase)
+
+---
+
+## links
+
+- must be valid URLs
+
+---
+
+## visibility
+
+```ts
+"Public" | "MembersOnly" | "Private";
+```
+
+---
+
+# ⚠️ PRE-CHECKS
+
+---
+
+## 1. Auth Required
+
+- extract `userId`
+
+---
+
+## 2. Member Check
+
+```ts
+Member.findOne({ userId, primaryRole: "PARTICIPANT" });
+```
+
+❌ if not → reject
+
+---
+
+## 3. Duplicate Profile Check
+
+```ts
+BuilderProfile.findOne({ userId });
+```
+
+❌ if exists → reject
+
+---
+
+## 4. Username Check
+
+```ts
+BuilderProfile.findOne({ username });
+```
+
+❌ if exists → reject
+
+---
+
+# 🔥 CREATION FLOW (STEP BY STEP)
+
+---
+
+## 🟢 STEP 1: Normalize Data
+
+- lowercase username
+- normalize skills
+
+---
+
+## 🟢 STEP 2: Create BuilderStats (EMPTY)
+
+```ts
+BuilderStats.create({
+  userId,
+  hackathonsJoined: 0,
+  projectsSubmitted: 0,
+  wins: 0,
+  reputationPoints: 0,
+});
+```
+
+---
+
+## 🟢 STEP 3: Create BuilderProfile
+
+```ts
+BuilderProfile.create({
+  userId,
+  communityId: null,
+
+  username,
+  fullName,
+  bio,
+  location,
+
+  university,
+  degree,
+  graduationYear,
+  experienceLevel,
+
+  githubUrl,
+  linkedinUrl,
+  portfolioUrl,
+
+  skills,
+  preferredTracks,
+
+  openToTeamInvite,
+  openToHiring,
+
+  visibility,
+
+  builderStatsId,
+});
+```
+
+---
+
+## 🟢 STEP 4: Waitlist Entry (OPTIONAL)
+
+👉 For upcoming events / early access
+
+---
+
+## 🟢 STEP 5: Audit Log
+
+```ts
+AuditLog.create({
+  action: "BUILDER_PROFILE_CREATED",
+  actorId: userId,
+});
+```
+
+---
+
+## 🟢 STEP 6: Response
+
+```json
+{
+  "success": true,
+  "message": "Builder profile created",
+  "data": {
+    "username": "abhishek-dev"
+  }
+}
+```
+
+---
+
+# 🔄 LIFECYCLE INTEGRATION (VERY IMPORTANT)
+
+---
+
+## 1. Discover
+
+- search via:
+  - skills
+  - reputation
+  - visibility
+
+---
+
+## 2. Apply
+
+- join event
+- create WaitlistEntry
+
+---
+
+## 3. Join Team
+
+- use `openToTeamInvite`
+- match via skills
+
+---
+
+## 4. Build
+
+- linked to project system
+
+---
+
+## 5. Submit
+
+- increment:
+
+```ts
+projectsSubmitted++;
+```
+
+---
+
+## 6. Get Judged
+
+- update:
+
+```ts
+averageScore;
+```
+
+---
+
+## 7. Earn Reputation
+
+```ts
+reputationPoints += score;
+wins++;
+```
+
+---
+
+## 8. Get Hired
+
+- filter:
+
+```ts
+openToHiring === true;
+visibility === "Public";
+```
+
+---
+
+# ⚡ PERFORMANCE DESIGN
+
+---
+
+## Indexes
 
 - username (unique)
-- bio, skills
-- github, linkedin
-- openToHiring
-
-## BuilderStats
-
-- hackathonsJoined
-- projectsSubmitted
-- wins
+- userId
+- skills[]
 - reputationPoints
 
 ---
 
-## ✅ TODO (Builder)
+# 🛡️ SECURITY RULES
 
-- [ ] Profile visibility control
-- [ ] Portfolio system
-- [ ] Skill endorsement system
-- [ ] Social graph (followers)
+---
+
+- cannot edit another user's profile
+- sanitize bio input
+- validate URLs
+- prevent script injection
+
+---
+
+# ⚡ EDGE CASES
+
+---
+
+## Case 1: User creates profile twice
+
+❌ reject
+
+---
+
+## Case 2: Username conflict
+
+❌ reject
+
+---
+
+## Case 3: Member not participant
+
+❌ reject
+
+---
+
+# 📦 FINAL FLOW
+
+```txt
+Request
+ ↓
+Validate
+ ↓
+Check Member
+ ↓
+Check duplicate
+ ↓
+Create Stats
+ ↓
+Create Profile
+ ↓
+Audit Log
+ ↓
+Response
+```
+
+---
+
+# ✅ TODO (Participant System)
+
+- [ ] Profile update API
+- [ ] Profile search API
+- [ ] Team matching system
 - [ ] Reputation calculation worker
+- [ ] Hiring filter system
+- [ ] Social graph (followers)
+- [ ] Skill endorsement system
+- [ ] Profile ranking algorithm
+- [ ] Event participation tracking
+- [ ] Resume parsing system
 
----
-
-# 🔥 Auth Flows
-
----
-
-## 🟣 Organization Signup
-
-```text
-Signup → Auth → User → Organization → Member (Owner) → Email Verification
-```
-
-### TODO
-
-- [ ] Email verification
-- [ ] Organization approval workflow
-- [ ] Slug generation
-
----
-
-## 🟢 Member Invite + Activation
-
-```text
-Invite → Member(OnBoarding) → Email → Activation → Password Set → Active
-```
-
-### TODO
-
-- [ ] Activation token system
-- [ ] Expiry handling
-- [ ] Resend invite
-
----
-
-## 🔵 Login Flow
-
-```text
-Login → Check Ban → Validate Password → Issue Tokens → Create Session
-```
-
-### TODO
-
-- [ ] Login attempt limiter
-- [ ] Account blocking logic
-- [ ] Suspicious login alerts
-
----
-
-# 🔐 Security System
-
----
-
-## Rules
-
-- 5 failed attempts → block
-- 10 min window
-- 40 min ban
-
----
-
-## ✅ TODO (Security)
-
-- [ ] IP tracking
-- [ ] Device fingerprinting
-- [ ] Geo-location alerts
-- [ ] Session revocation
-- [ ] Brute-force detection
-
----
-
-# 🔑 Token System
-
----
-
-## Types
-
-- Access Token (15 min)
-- Refresh Token (7 days)
-
----
-
-## Flow
-
-```text
-Login → Access + Refresh
-Refresh → New tokens
-Logout → revoke refresh
-```
-
----
-
-## ✅ TODO (Token System)
-
-- [ ] Token rotation
-- [ ] Token blacklist
-- [ ] Multi-device support
-
----
+👉 This is your **core builder ecosystem engine** — build this cleanly.
 
 # 📧 Email System (Nodemailer)
 

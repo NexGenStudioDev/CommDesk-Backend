@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import { AuthType } from "./Auth.type";
+import { AuthConstant, ROLE_CONSTANT } from "./Auth.Constant";
 
 const DeviceSessionSchema = new mongoose.Schema(
   {
@@ -19,7 +21,7 @@ const RefreshTokenSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const AuthSchema = new mongoose.Schema(
+const AuthSchema = new mongoose.Schema<AuthType>(
   {
     // 🔑 Identity
     email: {
@@ -29,6 +31,12 @@ const AuthSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       index: true,
+    },
+
+    role: {
+      type: String,
+      enum: ROLE_CONSTANT,
+      default: ROLE_CONSTANT.PARTICIPANT,
     },
 
     passwordHash: {
@@ -82,7 +90,6 @@ const AuthSchema = new mongoose.Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
       index: true,
     },
   },

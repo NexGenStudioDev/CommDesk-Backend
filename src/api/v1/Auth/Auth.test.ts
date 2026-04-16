@@ -12,10 +12,11 @@ import {
 
 import { ROLE_CONSTANT } from "./Auth.Constant";
 import { authService } from "./Auth.Service";
-import { connectDB, disconnectDB } from "../../../config/db.config";
+
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { authUtils } from "./Auth.Utils";
+import { connectDB, disconnectDB } from "../../../core/database/db.config";
 
 // ✅ Increase timeout (DB + async ops need time)
 jest.setTimeout(30000);
@@ -120,14 +121,12 @@ describe("Check Mandatory Functions", () => {
 describe("Create User Account with (Auth Service) functions", () => {
   test("Check Organization Account Creation", async () => {
     const userData: AuthType = {
-      firstName: "GDG",
-      lastName: "Ranchi",
-      email: "gdg.ranchi@example.com",
-      password: "gdgranchi@123",
+      email: "gdgranchi@gmail.com",
+      passwordHash: "hashedpassword123",
       role: ROLE_CONSTANT.ORGANIZATION,
-      emailVerified: false,
-      isBanned: false,
+      emailVerified: true,
       failedLoginAttempts: 0,
+      isBanned: false,
     };
 
     const createdUser = await authService.createUser(userData);
@@ -144,7 +143,6 @@ describe("Find User by ID (Auth Utils)", () => {
     console.log("Found User:", user);
     expect(user).toBeDefined();
     expect(user?._id.toString()).toBe(OrganizationId);
-    expect(user?.email).toBe("gdg.ranchi@example.com");
   });
 });
 

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { ROLE_CONSTANT } from "./Auth.Constant";
 
 export type DeviceSessionType = {
   deviceId: string;
@@ -16,8 +17,8 @@ export type RefreshTokenType = {
 export type AuthType = {
   email: string;
   passwordHash: string;
-
   emailVerified: boolean;
+  role: string;
 
   // 🔐 Security
   failedLoginAttempts: number;
@@ -44,7 +45,7 @@ export type AuthType = {
   deviceSessions?: DeviceSessionType[];
 
   // 🔗 Relation
-  userId: mongoose.Types.ObjectId;
+  userId?: mongoose.Types.ObjectId;
 
   createdAt?: Date;
   updatedAt?: Date;

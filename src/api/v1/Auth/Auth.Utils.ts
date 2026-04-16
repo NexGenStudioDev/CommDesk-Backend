@@ -1,4 +1,5 @@
 import { AuthModel } from "./Auth.model";
+import argon2 from "argon2";
 
 class AuthUtils {
   public async getUserById(userId: string) {
@@ -35,6 +36,10 @@ class AuthUtils {
       user.isBanned = false;
       await user.updateOne({ isBanned: user.isBanned });
     }
+  }
+
+  public async hashPassword(password: string): Promise<string> {
+    return await argon2.hash(password);
   }
 }
 
