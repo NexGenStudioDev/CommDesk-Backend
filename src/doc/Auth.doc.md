@@ -522,9 +522,20 @@ Create:
   },
 
   "owner": {
-    "fullName": "Abhishek Gupta",
-    "email": "abhishek@example.com",
-    "password": "securePassword"
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john@example.com",
+    "primaryRole": "ADMIN",
+    "location": "Berlin",
+    "skills": ["React", "Node"],
+    "areaOfInterest": ["MENTORSHIP"],
+    "internalNotes": "Speaker for React workshops",
+    "accessLevel": {
+      "internalDashboard": true,
+      "comunityForum": true,
+      "adminControls": false,
+      "superAdmin": false
+    }
   }
 }
 ```
