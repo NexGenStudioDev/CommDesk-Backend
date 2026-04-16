@@ -1,40 +1,99 @@
 import mongoose from "mongoose";
-import { ROLE_CONSTANT } from "./Auth.Constant";
 
-let AuthSchema = new mongoose.Schema(
+const DeviceSessionSchema = new mongoose.Schema(
   {
-    firstName: { type: String, required: true },
-    lastName: { type: String, required: true },
-    email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: {
-      type: String,
-      enum: Object.values(ROLE_CONSTANT),
-      default: ROLE_CONSTANT.PARTICIPANT,
-    },
-    emailVerified: { type: Boolean, default: false },
-
-    failedLoginAttempts: { type: Number, default: 0 },
-
-    ParticipantId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Participant",
-    },
-    OrganizationId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Organization",
-    },
-    JudgeId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Judge",
-    },
-    Permissions: {
-      type: mongoose.Schema.ObjectId,
-      ref: "Permission",
-    },
-    isBanned: { type: Boolean, default: false },
+    deviceId: { type: String, required: true },
+    ip: String,
+    userAgent: String,
+    lastActiveAt: { type: Date, default: Date.now },
   },
-  { timestamps: true },
+  { _id: false },
 );
 
-export let AuthModel = mongoose.model("Auth", AuthSchema);
+const RefreshTokenSchema = new mongoose.Schema(
+  {
+    token: { type: String, required: true },
+    expiresAt: { type: Date, required: true },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { _id: false },
+);
+
+const AuthSchema = new mongoose.Schema(
+  {
+    // 🔑 Identity
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+      index: true,
+    },
+
+    passwordHash: {
+      type: String,
+      required: true,
+    },
+
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    // 🔐 Security (Login Protection)
+    failedLoginAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    loginAttemptsWindow: {
+      type: Date,
+    },
+
+    banExpiresAt: {
+      type: Date,
+    },
+
+    isBanned: {
+      type: Boolean,
+      default: false,
+    },
+
+    lastLoginIP: String,
+    lastLoginUserAgent: String,
+    lastLoginAt: Date,
+
+    // 🔑 Token System
+    refreshTokens: [RefreshTokenSchema],
+
+    passwordResetToken: String,
+    passwordResetExpires: Date,
+
+    emailVerificationToken: String,
+    emailVerificationExpires: Date,
+
+    activationToken: String,
+
+    // 🔐 Device Sessions (multi-device support)
+    deviceSessions: [DeviceSessionSchema],
+
+    // 🔗 Relation (VERY IMPORTANT)
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
+
+// 🔥 Indexes (Performance + Security)
+AuthSchema.index({ email: 1 });
+AuthSchema.index({ userId: 1 });
+AuthSchema.index({ "refreshTokens.token": 1 });
+
+export const AuthModel = mongoose.model("Auth", AuthSchema);

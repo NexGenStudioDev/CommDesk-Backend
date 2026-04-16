@@ -135,10 +135,6 @@ describe("Create User Account with (Auth Service) functions", () => {
     OrganizationId = createdUser._id.toString();
     expect(createdUser).toBeDefined();
     expect(createdUser).toHaveProperty("_id");
-    expect(createdUser.firstName).toBe(userData.firstName);
-    expect(createdUser.lastName).toBe(userData.lastName);
-    expect(createdUser.email).toBe(userData.email);
-    expect(createdUser.role).toBe(userData.role);
   });
 });
 

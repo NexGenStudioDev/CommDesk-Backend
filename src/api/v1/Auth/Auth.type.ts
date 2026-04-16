@@ -1,16 +1,51 @@
 import mongoose from "mongoose";
 
+export type DeviceSessionType = {
+  deviceId: string;
+  ip?: string;
+  userAgent?: string;
+  lastActiveAt?: Date;
+};
+
+export type RefreshTokenType = {
+  token: string;
+  expiresAt: Date;
+  createdAt?: Date;
+};
+
 export type AuthType = {
-  firstName: string;
-  lastName: string;
   email: string;
-  password: string;
-  role: string;
+  passwordHash: string;
+
   emailVerified: boolean;
+
+  // 🔐 Security
   failedLoginAttempts: number;
-  ParticipantId?: mongoose.Types.ObjectId;
-  OrganizationId?: mongoose.Types.ObjectId;
-  JudgeId?: mongoose.Types.ObjectId;
-  Permissions?: mongoose.Types.ObjectId;
+  loginAttemptsWindow?: Date;
+  banExpiresAt?: Date;
   isBanned: boolean;
+
+  lastLoginIP?: string;
+  lastLoginUserAgent?: string;
+  lastLoginAt?: Date;
+
+  // 🔑 Tokens
+  refreshTokens?: RefreshTokenType[];
+
+  passwordResetToken?: string;
+  passwordResetExpires?: Date;
+
+  emailVerificationToken?: string;
+  emailVerificationExpires?: Date;
+
+  activationToken?: string;
+
+  // 🔐 Device Sessions
+  deviceSessions?: DeviceSessionType[];
+
+  // 🔗 Relation
+  userId: mongoose.Types.ObjectId;
+
+  createdAt?: Date;
+  updatedAt?: Date;
 };
