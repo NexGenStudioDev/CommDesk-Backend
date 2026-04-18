@@ -7,6 +7,7 @@ const DeviceSessionSchema = new mongoose.Schema(
     deviceId: { type: String, required: true },
     ip: String,
     userAgent: String,
+    location: String,
     lastActiveAt: { type: Date, default: Date.now },
   },
   { _id: false },
