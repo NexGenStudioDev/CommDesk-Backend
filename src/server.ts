@@ -8,8 +8,9 @@ import rateLimit from "express-rate-limit";
 import SendResponse from "./utils/SendResponse";
 import Pino_logger from "./core/logger/pino";
 import { env_Constant } from "./constants/env.constant";
-import { connectDB } from "./config/db.config";
+
 import { date } from "zod";
+import { connectDB } from "./core/database/db.config";
 
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";
