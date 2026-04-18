@@ -4,6 +4,7 @@ export type CommunitySchema = {
   OwnerID: mongoose.Types.ObjectId;
   CommunityName: string;
   Bio: string;
+  Slug: string;
   Website: string;
   Country: string;
   City: string;

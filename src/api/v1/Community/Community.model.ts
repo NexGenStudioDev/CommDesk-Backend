@@ -5,6 +5,7 @@ const communitySchema = new Schema<CommunitySchema>({
   OwnerID: { type: Schema.Types.ObjectId, ref: "User", required: true },
   CommunityName: { type: String, required: true },
   Bio: { type: String, required: true },
+  Slug: { type: String, required: true, unique: true }, 
   Website: { type: String, required: true },
   Country: { type: String, required: true },
   City: { type: String, required: true },
