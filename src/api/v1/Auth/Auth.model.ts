@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
-import { AuthConstant, ROLE_CONSTANT } from "./Auth.Constant";
+import { ROLE_CONSTANT } from "./Auth.Constant";
 
 const DeviceSessionSchema = new mongoose.Schema(
   {

@@ -53,3 +53,5 @@ let MemberSchema = new mongoose.Schema<MemberType>({
 
   permissions_id: [{ type: String }],
 });
+
+export const MemberModel = mongoose.model<MemberType>("Member", MemberSchema);
