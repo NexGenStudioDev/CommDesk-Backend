@@ -60,7 +60,11 @@ app.use(limiter);
 const PORT = env_Constant.PORT || 3000;
 
 app.get("/", async (req: express.Request, res: express.Response) => {
-  const deviceInfo = await DeviceSessionUtils.getDeviceInfo(req.ip , req.headers["user-agent"] || "unknown", "guest");
+  const deviceInfo = await DeviceSessionUtils.getDeviceInfo(
+    req.ip,
+    req.headers["user-agent"] || "unknown",
+    "guest",
+  );
   console.log("Device Info:", deviceInfo);
   SendResponse.SuccessResponse(res, deviceInfo, "Welcome to CommDesk API");
 });

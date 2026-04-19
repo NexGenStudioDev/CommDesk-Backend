@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { ROLE_CONSTANT } from "./Auth.Constant";
+import { DeviceSessionSchema } from "../DeviceSession/DeviceSession.model";
 
 const RefreshTokenSchema = new mongoose.Schema(
   {
@@ -11,7 +12,7 @@ const RefreshTokenSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const AuthSchema = new mongoose.Schema<AuthType>(
+export const AuthSchema = new mongoose.Schema<AuthType>(
   {
     // 🔑 Identity
     email: {
