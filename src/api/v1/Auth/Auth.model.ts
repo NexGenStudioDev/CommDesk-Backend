@@ -2,17 +2,6 @@ import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { ROLE_CONSTANT } from "./Auth.Constant";
 
-const DeviceSessionSchema = new mongoose.Schema(
-  {
-    deviceId: { type: String, required: true },
-    ip: String,
-    userAgent: String,
-    location: String,
-    lastActiveAt: { type: Date, default: Date.now },
-  },
-  { _id: false },
-);
-
 const RefreshTokenSchema = new mongoose.Schema(
   {
     token: { type: String, required: true },
