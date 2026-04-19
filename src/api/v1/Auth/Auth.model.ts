@@ -1,16 +1,7 @@
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
-import { AuthConstant, ROLE_CONSTANT } from "./Auth.Constant";
-
-const DeviceSessionSchema = new mongoose.Schema(
-  {
-    deviceId: { type: String, required: true },
-    ip: String,
-    userAgent: String,
-    lastActiveAt: { type: Date, default: Date.now },
-  },
-  { _id: false },
-);
+import { ROLE_CONSTANT } from "./Auth.Constant";
+import { DeviceSessionSchema } from "../DeviceSession/DeviceSession.model";
 
 const RefreshTokenSchema = new mongoose.Schema(
   {
@@ -21,7 +12,7 @@ const RefreshTokenSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const AuthSchema = new mongoose.Schema<AuthType>(
+export const AuthSchema = new mongoose.Schema<AuthType>(
   {
     // 🔑 Identity
     email: {

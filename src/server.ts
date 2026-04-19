@@ -8,8 +8,10 @@ import rateLimit from "express-rate-limit";
 import SendResponse from "./utils/SendResponse";
 import Pino_logger from "./core/logger/pino";
 import { env_Constant } from "./constants/env.constant";
-import { connectDB } from "./config/db.config";
+
 import { date } from "zod";
+import { connectDB } from "./core/database/db.config";
+import DeviceSessionUtils from "./api/v1/DeviceSession/DeviceSession.Utils";
 
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";
@@ -57,8 +59,14 @@ app.use(limiter);
 
 const PORT = env_Constant.PORT || 3000;
 
-app.get("/", (req: express.Request, res: express.Response) => {
-  SendResponse.SuccessResponse(res, null, "Welcome to CommDesk API");
+app.get("/", async (req: express.Request, res: express.Response) => {
+  const deviceInfo = await DeviceSessionUtils.getDeviceInfo(
+    req.ip,
+    req.headers["user-agent"] || "unknown",
+    "guest",
+  );
+  console.log("Device Info:", deviceInfo);
+  SendResponse.SuccessResponse(res, deviceInfo, "Welcome to CommDesk API");
 });
 
 const startServer = async () => {

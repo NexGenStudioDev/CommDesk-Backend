@@ -17,6 +17,7 @@ import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { authUtils } from "./Auth.Utils";
 import { connectDB, disconnectDB } from "../../../core/database/db.config";
+import { AuthSchema } from "./Auth.model";
 
 // ✅ Increase timeout (DB + async ops need time)
 jest.setTimeout(30000);
@@ -51,63 +52,58 @@ describe("Check Auth Constants", () => {
   });
 });
 
-describe("Check Auth Model", () => {
-  it("Check Auth Model Schema Fields and Types", () => {
-    const authSchemaFields = [
-      { name: "firstName", type: String, required: true },
-      { name: "lastName", type: String, required: true },
-      { name: "email", type: String, required: true, unique: true },
-      { name: "password", type: String, required: true },
-      {
-        name: "role",
-        type: String,
-        enum: Object.values(ROLE_CONSTANT),
-        default: ROLE_CONSTANT.PARTICIPANT,
-      },
-      { name: "emailVerified", type: Boolean, default: false },
-      { name: "failedLoginAttempts", type: Number, default: 0 },
-      {
-        name: "ParticipantId",
-        type: "ObjectId",
-        ref: "Participant",
-        required: true,
-      },
-      {
-        name: "OrganizationId",
-        type: "ObjectId",
-        ref: "Organization",
-        required: true,
-      },
-      { name: "JudgeId", type: "ObjectId", ref: "Judge", required: true },
-      {
-        name: "Permissions",
-        type: "ObjectId",
-        ref: "Permission",
-        required: true,
-      },
-      { name: "isBanned", type: Boolean, default: false },
-    ];
+describe("Auth Model Schema", () => {
+  it("should have required fields", () => {
+    expect(AuthSchema.path("email")).toBeDefined();
+    expect(AuthSchema.path("passwordHash")).toBeDefined();
+    expect(AuthSchema.path("role")).toBeDefined();
+    expect(AuthSchema.path("userId")).toBeDefined();
+  });
 
-    authSchemaFields.forEach((field) => {
-      expect(field).toHaveProperty("name");
-      expect(field).toHaveProperty("type");
+  it("should enforce required validation", () => {
+    expect(AuthSchema.path("email").options.required).toBe(true);
+    expect(AuthSchema.path("passwordHash").options.required).toBe(true);
+  });
 
-      if (field.required) {
-        expect(field).toHaveProperty("required", true);
-      }
+  it("should enforce unique email", () => {
+    expect(AuthSchema.path("email").options.unique).toBe(true);
+  });
 
-      if (field.unique) {
-        expect(field).toHaveProperty("unique", true);
-      }
+  it("should have correct role enum", () => {
+    const roleEnum = AuthSchema.path("role").options.enum;
+    const roleValues = Array.isArray(roleEnum)
+      ? roleEnum
+      : Object.values(roleEnum);
 
-      if (field.enum) {
-        expect(Array.isArray(field.enum)).toBe(true);
-      }
+    expect(roleValues.sort()).toEqual(Object.values(ROLE_CONSTANT).sort());
+  });
 
-      if (field.default !== undefined) {
-        expect(field).toHaveProperty("default");
-      }
-    });
+  it("should have correct defaults", () => {
+    expect(AuthSchema.path("role").options.default).toBe(
+      ROLE_CONSTANT.PARTICIPANT,
+    );
+
+    expect(AuthSchema.path("emailVerified").options.default).toBe(false);
+
+    expect(AuthSchema.path("failedLoginAttempts").options.default).toBe(0);
+
+    expect(AuthSchema.path("isBanned").options.default).toBe(false);
+  });
+
+  it("should have relation reference", () => {
+    expect(AuthSchema.path("userId").options.ref).toBe("User");
+  });
+
+  it("should have refreshTokens subdocument array", () => {
+    expect(AuthSchema.path("refreshTokens")).toBeDefined();
+  });
+
+  it("should have deviceSessions subdocument array", () => {
+    expect(AuthSchema.path("deviceSessions")).toBeDefined();
+  });
+
+  it("should enable timestamps", () => {
+    expect(AuthSchema.options.timestamps).toBe(true);
   });
 });
 
