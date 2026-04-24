@@ -6,7 +6,8 @@ export const objectIdSchema = z
   .string()
   .refine((val) => mongoose.Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId",
-  }).optional();
+  })
+  .optional();
 
 // Zod schema
 export const CreateOrganizerZodSchema = z.object({

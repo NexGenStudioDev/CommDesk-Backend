@@ -1,6 +1,5 @@
 import type { Response } from "express";
 
-
 class SendResponse {
   static SuccessResponse(res: Response, data: unknown, message: string) {
     res.status(200).json({
@@ -10,8 +9,7 @@ class SendResponse {
     });
   }
 
-  static ErrorResponse(res: Response, error: unknown , message: string) {
-    
+  static ErrorResponse(res: Response, error: unknown, message: string) {
     res.status(500).json({
       success: false,
       message,
