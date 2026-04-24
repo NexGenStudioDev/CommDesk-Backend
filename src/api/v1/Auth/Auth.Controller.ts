@@ -64,7 +64,8 @@ class AuthController {
           skills: owner.skills,
           areaOfInterest: owner.areaOfInterest,
           internalNotes: owner.internalNotes,
-          imageUrl: "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",  
+          imageUrl:
+            "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",
           membershipStatus: "Active",
           onboardingSource: "website",
         });
