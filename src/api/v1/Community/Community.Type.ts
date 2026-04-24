@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export type CommunitySchema = {
-  OwnerID: mongoose.Types.ObjectId;
+  OwnerID?: mongoose.Types.ObjectId;
   CommunityName: string;
   Bio: string;
   Slug: string;
@@ -22,6 +22,6 @@ export type CommunitySchema = {
   };
 
   Status: "pending" | "under_review" | "approved" | "active";
-  Members: mongoose.Types.ObjectId[]; // Array of Member IDs
-  Judges: mongoose.Types.ObjectId[]; // Array of Judge IDs
+  Members?: mongoose.Types.ObjectId[]; // Array of Member IDs
+  Judges?: mongoose.Types.ObjectId[]; // Array of Judge IDs
 };

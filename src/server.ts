@@ -1,7 +1,6 @@
 import express from "express";
 import morgan from "morgan";
-import { config } from "dotenv";
-config();
+
 import helmet from "helmet";
 
 import rateLimit from "express-rate-limit";
@@ -9,7 +8,6 @@ import SendResponse from "./utils/SendResponse";
 import Pino_logger from "./core/logger/pino";
 import { env_Constant } from "./constants/env.constant";
 
-import { date } from "zod";
 import { connectDB } from "./core/database/db.config";
 import DeviceSessionUtils from "./api/v1/DeviceSession/DeviceSession.Utils";
 
