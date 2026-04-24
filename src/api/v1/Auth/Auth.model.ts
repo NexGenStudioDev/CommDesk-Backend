@@ -89,9 +89,4 @@ export const AuthSchema = new mongoose.Schema<AuthType>(
   },
 );
 
-// 🔥 Indexes (Performance + Security)
-AuthSchema.index({ email: 1 });
-AuthSchema.index({ userId: 1 });
-AuthSchema.index({ "refreshTokens.token": 1 });
-
 export const AuthModel = mongoose.model("Auth", AuthSchema);

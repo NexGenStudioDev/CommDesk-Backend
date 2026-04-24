@@ -13,7 +13,6 @@ class AuthController {
   public async CommunitySignUp(req: Request, res: Response) {
     try {
       const {
-        owner,
         CommunityName,
         password,
         Bio,
@@ -24,7 +23,10 @@ class AuthController {
         OfficialEmail,
         Website,
         socialLinks,
+        owner,
       } = req.body;
+
+      console.log("req body ->", req.body);
 
       let CreateNewCommunity = await communityService.createNewCommunity({
         CommunityName,
@@ -44,6 +46,7 @@ class AuthController {
         let Auth = await authService.createUser({
           email: CreateNewCommunity.OfficialEmail,
           passwordHash: await authUtils.hashPassword(password),
+          failedLoginAttempts: 0,
           isBanned: false,
           role: ROLE_CONSTANT.ORGANIZATION,
           emailVerified: false,
@@ -62,7 +65,22 @@ class AuthController {
         CreateNewCommunity,
         AuthConstant.COMMUNITY_ACCOUNT_CREATED,
       );
-    } catch (error) {}
+    } catch (error: unknown) {
+      console.log(error);
+      let message = "An error occurred";
+      let errorData = error;
+      if (error && typeof error === "object" && "issues" in error) {
+        // Zod validation error
+        message = "Validation failed";
+        errorData = (error as any).issues || error;
+      } else if (error instanceof Error) {
+        message = error.message;
+        errorData = error;
+      } else {
+        message = String(error);
+      }
+      SendResponse.ErrorResponse(res, errorData, message);
+    }
   }
 }
 

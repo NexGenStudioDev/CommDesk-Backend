@@ -10,18 +10,10 @@ import { env_Constant } from "./constants/env.constant";
 
 import { connectDB } from "./core/database/db.config";
 import DeviceSessionUtils from "./api/v1/DeviceSession/DeviceSession.Utils";
+import app from "./app";
 
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // Limit requests per 15 minutes
-  limit: isProduction ? 100 : 1000, // Limit each IP to 100 requests per windowMs in production, 1000 in development
-  standardHeaders: "draft-8", // Returns rate limit info in headers
-  legacyHeaders: false,
-});
-
-const app = express();
 
 app.set("trust proxy", 1);
 
@@ -50,10 +42,6 @@ app.use(
     },
   ),
 );
-
-app.use(express.json());
-
-app.use(limiter);
 
 const PORT = env_Constant.PORT || 3000;
 
