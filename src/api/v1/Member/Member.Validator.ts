@@ -54,8 +54,6 @@ export const MemberValidationSchema: z.ZodType<MemberType> = z.object({
 
   internalNotes: z.string().optional(),
 
-  permissions_id: z.array(z.string()).optional(),
-
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
 });

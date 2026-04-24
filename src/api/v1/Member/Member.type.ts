@@ -27,7 +27,6 @@ export type MemberType = {
   skills?: string[];
   areaOfInterest?: string[];
   internalNotes?: string;
-  permissions_id?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 };
