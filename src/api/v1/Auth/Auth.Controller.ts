@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { permissionService } from "../Permission/Permission.service";
-import slug from "slug";
+
 import { Default_Organization_Permissions } from "../Permission/Permission.constant";
 import { communityService } from "../Community/Community.Service";
 import { authService } from "./Auth.Service";
@@ -8,6 +8,7 @@ import { authUtils } from "./Auth.Utils";
 import { AuthConstant, ROLE_CONSTANT } from "./Auth.Constant";
 import SendResponse from "../../../utils/SendResponse";
 import { memberService } from "../Member/Member.Service";
+import slugify from "slugify";
 
 class AuthController {
   public async CommunitySignUp(req: Request, res: Response) {
@@ -26,11 +27,15 @@ class AuthController {
         owner,
       } = req.body;
 
-      console.log("req body ->", req.body);
+
 
       let CreateNewCommunity = await communityService.createNewCommunity({
         CommunityName,
-        Slug: slug(CommunityName + crypto.randomUUID()),
+        Slug: slugify(CommunityName + "-" + crypto.randomUUID(), {
+          lower: true, 
+          strict: true, 
+          trim: true, 
+        }),
         Bio,
         City,
         ContactPhone,

@@ -1,4 +1,3 @@
-import request from "supertest";
 import {
   afterAll,
   beforeAll,
@@ -16,8 +15,10 @@ import { authService } from "./Auth.Service";
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { authUtils } from "./Auth.Utils";
-import { connectDB, disconnectDB } from "../../../core/database/db.config";
+import { connectDB, disconnectDB, DropDB } from "../../../core/database/db.config";
 import { AuthSchema } from "./Auth.model";
+import supertest , {Response} from "supertest";
+import app from "../../../app";
 
 // ✅ Increase timeout (DB + async ops need time)
 jest.setTimeout(30000);
@@ -142,24 +143,53 @@ describe("Find User by ID (Auth Utils)", () => {
   });
 });
 
-// describe("Check Auth API Endpoints", () => {
-//   test("Create Super Admin Account", async () => {});
+describe("Check Auth API Endpoints", () => {
+  describe("Check Organization Api", () => {
+    let OrganizationData = {
+      owner: {
+        firstName: "John", // First name of the community owner
+        lastName: "Doe", // Last name of the community owner
+        email: "john@example.com", // Email address of the owner
+        primaryRole: "ADMIN", // The primary role of the owner in the community (can be "ADMIN", "MODERATOR", etc.)
+        location: "Berlin", // The geographical location of the owner
+        skills: ["React", "Node"], // Skills of the owner
+        areaOfInterest: ["MENTORSHIP"], // The owner's area of interest
+        internalNotes: "Speaker for React workshops", // Internal notes about the owner
+        accessLevel: {
+          internalDashboard: true, // Whether the owner has access to the internal dashboard
+          communityForum: true, // Whether the owner has access to the community forum
+          adminControls: false, // Whether the owner has admin control over the platform
+          superAdmin: false, // Whether the owner has super admin privileges
+        },
+      },
 
-//   test("Create Participant Account", async () => {});
+      CommunityName: "Apex Circle", // Name of the community
+      password: "securepassword123", // Password for community's account (hashed before saving)
+      Bio: "Developer community focused on open source and hackathons", // Short description of the community
+      City: "Ranchi", // City where the community is based
+      ContactPhone: "6202665965", // Contact phone number for the community
+      Country: "India", // Country where the community is located
+      LogoUrl: "https://cdn.com/logo.png", // URL to the community's logo image
+      OfficialEmail: "team@apexcircle.dev", // Official email of the community
+      Website: "https://apexcircle.dev", // URL to the community's website
 
-//   test("Create Judge Account", async () => {});
+      socialLinks: {
+        github: "https://github.com/apexcircle",
+        discord: "https://discord.gg/apexcircle",
+        twitter: "https://twitter.com/apexcircle",
+      },
+    };
 
-//   test("Create Organization Account", async () => {});
+    test("Test Create new Organization Api", async () => {
+      const res: Response = await supertest(app)
+        .post("/api/v1/signup/community")
+        .send(OrganizationData);
 
-//   test("Create Mentor Account", async () => {});
-
-//   test("Login with Valid Credentials", async () => {});
-
-//   test("Login with Invalid Credentials", async () => {});
-
-//   test("Access Protected Route with Valid Token", async () => {});
-
-//   test("Access Protected Route with Invalid Token", async () => {});
-
-//   test("Access Protected Route with Expired Token", async () => {});
-// });
+      expect(res.status).toBe(200);
+      expect(res.body).toBeDefined()
+      expect(res.body.success).toBe(true)
+      console.log('Create new Organization Test Done 😍')
+  
+    });
+  });
+});
