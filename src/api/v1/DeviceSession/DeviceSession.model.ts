@@ -12,6 +12,7 @@ export const DeviceSessionSchema = new Schema<IDeviceSession>(
     sessionId: {
       type: String,
       required: true,
+      sparse: true,
       unique: true,
     },
 
