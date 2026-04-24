@@ -7,11 +7,13 @@ import { authService } from "./Auth.Service";
 import { authUtils } from "./Auth.Utils";
 import { AuthConstant, ROLE_CONSTANT } from "./Auth.Constant";
 import SendResponse from "../../../utils/SendResponse";
+import { memberService } from "../Member/Member.Service";
 
 class AuthController {
   public async CommunitySignUp(req: Request, res: Response) {
     try {
       const {
+        owner,
         CommunityName,
         password,
         Bio,
@@ -21,12 +23,7 @@ class AuthController {
         LogoUrl,
         OfficialEmail,
         Website,
-        discord,
-        github,
-        instagram,
-        linkedin,
-        twitter,
-        youtube,
+        socialLinks,
       } = req.body;
 
       let CreateNewCommunity = await communityService.createNewCommunity({
@@ -40,14 +37,7 @@ class AuthController {
         OfficialEmail,
         Website,
         Status: "pending",
-        SocialLinks: {
-          discord,
-          github,
-          instagram,
-          linkedin,
-          twitter,
-          youtube,
-        },
+        SocialLinks: socialLinks,
       });
 
       if (CreateNewCommunity) {
@@ -63,6 +53,8 @@ class AuthController {
           Default_Organization_Permissions,
           String(Auth._id),
         );
+
+        await memberService.createNewMember(owner);
       }
 
       SendResponse.SuccessResponse(
