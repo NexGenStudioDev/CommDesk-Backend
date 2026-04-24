@@ -1,5 +1,6 @@
 import { Mongoose, Schema } from "mongoose";
 import type { CommunitySchema } from "./Community.Type";
+import { model } from "mongoose";
 
 const communitySchema = new Schema<CommunitySchema>({
   OwnerID: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -31,5 +32,8 @@ const communitySchema = new Schema<CommunitySchema>({
   Judges: [{ type: Schema.Types.ObjectId, ref: "Judge" }], // Array of Judge IDs
 });
 
-export const CommunityModel = (mongoose: Mongoose) =>
-  mongoose.model<CommunitySchema>("Community", communitySchema);
+// export const AuthModel = mongoose.model("Auth", AuthSchema);
+export const CommunityModel = model<CommunitySchema>(
+  "Community",
+  communitySchema,
+);

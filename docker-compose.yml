@@ -6,17 +6,36 @@ services:
     ports:
       - "3000:3000"
     depends_on:
-      - mongo
+      mongo:
+        condition: service_healthy
+    env_file:
+      - ./.env
     environment:
-      - MONGO_URI=mongodb://mongo:27017/mydb
+      MONGO_URI: mongodb://mongo:27017/CommDesk
+      NODE_ENV: development
+    restart: unless-stopped
+    networks:
+      - commdesk-net
 
   mongo:
-    image: mongo:7
-    container_name: mongo
+    image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    container_name: commdesk-mongo
     ports:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
+    restart: unless-stopped
+    networks:
+      - commdesk-net
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongo-data:
+
+networks:
+  commdesk-net:
+    driver: bridge
