@@ -21,7 +21,7 @@ export type AuthType = {
   role: string;
 
   // 🔐 Security
-  failedLoginAttempts?: number;
+  failedLoginAttempts: number;
   loginAttemptsWindow?: Date;
   banExpiresAt?: Date;
   isBanned: boolean;

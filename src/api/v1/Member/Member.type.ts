@@ -20,14 +20,13 @@ export type MemberType = {
   publicProfileUrl?: string;
   AuthId?: string;
   email: string;
-  membershipStatus: memberStatusType;
-  onboardingSource: onBoardingSourceType;
+  membershipStatus?: memberStatusType;
+  onboardingSource?: onBoardingSourceType;
   primaryRole?: string;
   location?: string;
   skills?: string[];
   areaOfInterest?: string[];
   internalNotes?: string;
-  permissions_id?: string[];
   createdAt?: Date;
   updatedAt?: Date;
 };

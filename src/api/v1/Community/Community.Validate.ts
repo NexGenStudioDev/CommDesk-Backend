@@ -4,9 +4,10 @@ import mongoose from "mongoose";
 // ObjectId validator
 export const objectIdSchema = z
   .string()
-  .refine((val) => mongoose.Types.ObjectId.isValid(val), {
+  .refine((val) => val === "" || mongoose.Types.ObjectId.isValid(val), {
     message: "Invalid ObjectId",
-  });
+  })
+  .optional();
 
 // Zod schema
 export const CreateOrganizerZodSchema = z.object({

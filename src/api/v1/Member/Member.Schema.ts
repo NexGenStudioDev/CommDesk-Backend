@@ -50,8 +50,6 @@ let MemberSchema = new mongoose.Schema<MemberType>({
   skills: [{ type: String }],
   areaOfInterest: [{ type: String }],
   internalNotes: { type: String },
-
-  permissions_id: [{ type: String }],
 });
 
 export const MemberModel = mongoose.model<MemberType>("Member", MemberSchema);

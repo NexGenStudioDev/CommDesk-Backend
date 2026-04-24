@@ -12,6 +12,7 @@ class AuthService {
         email: Data.email,
         passwordHash: hashPassword,
         userId: Data.userId,
+        role: Data.role,
       });
       return createNewUser;
     } catch (error) {

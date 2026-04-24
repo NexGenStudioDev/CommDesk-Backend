@@ -46,6 +46,29 @@ class PermissionService {
 
     return newPermissions;
   }
+
+  public async assignOrganizationPermissions(userId: string) {
+    // 1. Remove duplicate permissions (based on resource)
+    const uniquePermissions = Array.from(
+      new Map(
+        Default_Organization_Permissions.map((p) => [p.resource, p]),
+      ).values(),
+    );
+
+    // 2. Attach userId
+    const formattedPermissions = uniquePermissions.map((permission) => ({
+      ...permission,
+      userId,
+    }));
+
+    // 3. Insert into DB (skip duplicates safely)
+    const createdPermissions = await Permission.insertMany(
+      formattedPermissions,
+      { ordered: false },
+    );
+
+    return createdPermissions;
+  }
 }
 
 export const permissionService = new PermissionService();

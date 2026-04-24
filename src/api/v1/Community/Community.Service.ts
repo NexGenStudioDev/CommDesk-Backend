@@ -5,7 +5,7 @@ import { CreateOrganizerZodSchema } from "./Community.Validate";
 class CommunityService {
   async createNewCommunity(Data: CommunitySchema) {
     try {
-      CreateOrganizerZodSchema.safeParse(Data);
+      CreateOrganizerZodSchema.parse(Data);
       let createNewCommunity = await CommunityModel.create(Data);
 
       if (!createNewCommunity) {
@@ -14,7 +14,7 @@ class CommunityService {
 
       return createNewCommunity;
     } catch (error: any) {
-      throw new Error(error.message);
+      throw error;
     }
   }
 }
