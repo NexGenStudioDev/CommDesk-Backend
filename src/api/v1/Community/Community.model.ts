@@ -3,7 +3,7 @@ import type { CommunitySchema } from "./Community.Type";
 import { model } from "mongoose";
 
 const communitySchema = new Schema<CommunitySchema>({
-  OwnerID: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  OwnerID: { type: Schema.Types.ObjectId, ref: "User" },
   CommunityName: { type: String, required: true },
   Bio: { type: String, required: true },
   Slug: { type: String, required: true, unique: true },

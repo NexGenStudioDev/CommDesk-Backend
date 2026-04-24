@@ -20,8 +20,8 @@ export type MemberType = {
   publicProfileUrl?: string;
   AuthId?: string;
   email: string;
-  membershipStatus: memberStatusType;
-  onboardingSource: onBoardingSourceType;
+  membershipStatus?: memberStatusType;
+  onboardingSource?: onBoardingSourceType;
   primaryRole?: string;
   location?: string;
   skills?: string[];

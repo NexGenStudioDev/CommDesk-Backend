@@ -1,7 +1,17 @@
+import { MemberModel } from "./Member.Schema";
 import { MemberType } from "./Member.type";
+import { MemberValidationSchema } from "./Member.Validator";
 
 class MemberService {
-  createNewMember(Data: MemberType) {}
+  async createNewMember(Data: MemberType) {
+    try {
+      MemberValidationSchema.parseAsync(Data);
+      let CreateNewMember = await MemberModel.create(Data);
+      if (!CreateNewMember) throw new Error("Failed to Create New Member");
+    } catch (error: any) {
+      throw new Error(error.message);
+    }
+  }
 }
 
 export const memberService = new MemberService();

@@ -52,12 +52,22 @@ class AuthController {
           emailVerified: false,
         });
 
-        await permissionService.createPermission(
-          Default_Organization_Permissions,
-          String(Auth._id),
-        );
+        await permissionService.assignOrganizationPermissions(String(Auth._id));
 
-        await memberService.createNewMember(owner);
+        await memberService.createNewMember({
+          AuthId: String(Auth._id),
+          firstName: owner.firstName,
+          lastName: owner.lastName,
+          email: owner.email,
+          primaryRole: ROLE_CONSTANT.ADMIN,
+          location: owner.location,
+          skills: owner.skills,
+          areaOfInterest: owner.areaOfInterest,
+          internalNotes: owner.internalNotes,
+          imageUrl: "https://img.freepik.com/premium-vector/boy-with-sweater-that-says-hes-boy_1230457-43137.jpg?w=360",  
+          membershipStatus: "Active",
+          onboardingSource: "website",
+        });
       }
 
       SendResponse.SuccessResponse(
