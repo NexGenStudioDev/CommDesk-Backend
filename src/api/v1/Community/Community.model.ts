@@ -32,6 +32,8 @@ const communitySchema = new Schema<CommunitySchema>({
   Judges: [{ type: Schema.Types.ObjectId, ref: "Judge" }], // Array of Judge IDs
 });
 
-
 // export const AuthModel = mongoose.model("Auth", AuthSchema);
-export const CommunityModel = model<CommunitySchema>("Community", communitySchema);
+export const CommunityModel = model<CommunitySchema>(
+  "Community",
+  communitySchema,
+);

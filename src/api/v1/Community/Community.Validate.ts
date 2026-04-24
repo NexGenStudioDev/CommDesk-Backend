@@ -17,10 +17,7 @@ export const CreateOrganizerZodSchema = z.object({
     .min(3, "Community name must be at least 3 characters")
     .max(100),
 
-  Bio: z
-    .string()
-    .min(10, "Bio must be at least 10 characters")
-    .max(1000),
+  Bio: z.string().min(10, "Bio must be at least 10 characters").max(1000),
 
   Slug: z
     .string()
@@ -28,25 +25,16 @@ export const CreateOrganizerZodSchema = z.object({
     .max(100)
     .regex(/^[a-z0-9-]+$/, "Slug must be lowercase and URL-friendly"),
 
-  Website: z
-    .string()
-    .url("Invalid website URL")
-    .optional()
-    .or(z.literal("")),
+  Website: z.string().url("Invalid website URL").optional().or(z.literal("")),
 
   Country: z.string().min(2),
   City: z.string().min(2),
 
   OfficialEmail: z.string().email("Invalid email"),
 
-  ContactPhone: z
-    .string()
-    .regex(/^[0-9]{7,15}$/, "Invalid phone number"),
+  ContactPhone: z.string().regex(/^[0-9]{7,15}$/, "Invalid phone number"),
 
-  LogoUrl: z
-    .string()
-    .url("Invalid logo URL")
-    .optional(),
+  LogoUrl: z.string().url("Invalid logo URL").optional(),
 
   SocialLinks: z.object({
     github: z.string().url().optional(),
