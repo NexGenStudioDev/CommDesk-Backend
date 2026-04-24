@@ -27,14 +27,12 @@ class AuthController {
         owner,
       } = req.body;
 
-
-
       let CreateNewCommunity = await communityService.createNewCommunity({
         CommunityName,
         Slug: slugify(CommunityName + "-" + crypto.randomUUID(), {
-          lower: true, 
-          strict: true, 
-          trim: true, 
+          lower: true,
+          strict: true,
+          trim: true,
         }),
         Bio,
         City,

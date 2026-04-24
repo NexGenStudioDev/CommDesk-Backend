@@ -15,9 +15,13 @@ import { authService } from "./Auth.Service";
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { authUtils } from "./Auth.Utils";
-import { connectDB, disconnectDB, DropDB } from "../../../core/database/db.config";
+import {
+  connectDB,
+  disconnectDB,
+  DropDB,
+} from "../../../core/database/db.config";
 import { AuthSchema } from "./Auth.model";
-import supertest , {Response} from "supertest";
+import supertest, { Response } from "supertest";
 import app from "../../../app";
 
 // ✅ Increase timeout (DB + async ops need time)
@@ -186,10 +190,9 @@ describe("Check Auth API Endpoints", () => {
         .send(OrganizationData);
 
       expect(res.status).toBe(200);
-      expect(res.body).toBeDefined()
-      expect(res.body.success).toBe(true)
-      console.log('Create new Organization Test Done 😍')
-  
+      expect(res.body).toBeDefined();
+      expect(res.body.success).toBe(true);
+      console.log("Create new Organization Test Done 😍");
     });
   });
 });
