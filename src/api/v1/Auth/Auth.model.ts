@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import { AuthType } from "./Auth.type";
 import { ROLE_CONSTANT } from "./Auth.Constant";
-import { DeviceSessionSchema } from "../DeviceSession/DeviceSession.model";
 
 const RefreshTokenSchema = new mongoose.Schema(
   {
@@ -74,10 +73,6 @@ export const AuthSchema = new mongoose.Schema<AuthType>(
 
     activationToken: String,
 
-    // 🔐 Device Sessions (multi-device support)
-    deviceSessions: [DeviceSessionSchema],
-
-    // 🔗 Relation (VERY IMPORTANT)
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
