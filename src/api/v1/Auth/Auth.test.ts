@@ -103,8 +103,6 @@ describe("Auth Model Schema", () => {
     expect(AuthSchema.path("refreshTokens")).toBeDefined();
   });
 
-  
-
   it("should enable timestamps", () => {
     expect(AuthSchema.options.timestamps).toBe(true);
   });
