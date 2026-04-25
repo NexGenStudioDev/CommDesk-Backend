@@ -1,24 +1,27 @@
-import { Schema, model } from "mongoose";
-import { IDeviceSession } from "./DeviceSession.type";
+import { Schema, model, Types } from "mongoose";
+import { nanoid } from "nanoid";
 
-export const DeviceSessionSchema = new Schema<IDeviceSession>(
+const DeviceSessionSchema = new Schema(
   {
     userId: {
-      type: Schema.Types.ObjectId,
+      type: Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
 
     sessionId: {
       type: String,
+      default: () => nanoid(),
+      unique: true, // ✅ safe now (top-level field)
       required: true,
-      sparse: true,
-      unique: true,
+      index: true,
     },
 
     deviceId: {
       type: String,
       required: true,
+      index: true,
     },
 
     deviceName: String,
@@ -35,6 +38,7 @@ export const DeviceSessionSchema = new Schema<IDeviceSession>(
     isActive: {
       type: Boolean,
       default: true,
+      index: true,
     },
 
     location: {
@@ -46,11 +50,12 @@ export const DeviceSessionSchema = new Schema<IDeviceSession>(
     lastActiveAt: {
       type: Date,
       default: Date.now,
+      index: true,
     },
   },
-  {
-    timestamps: true,
-  },
+  { timestamps: true },
 );
 
-export const DeviceSessionModel = model("DeviceSession", DeviceSessionSchema);
+DeviceSessionSchema.index({ userId: 1, deviceId: 1 }, { unique: true });
+
+const DeviceSession = model("DeviceSession", DeviceSessionSchema);

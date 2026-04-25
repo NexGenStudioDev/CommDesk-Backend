@@ -41,9 +41,6 @@ export type AuthType = {
 
   activationToken?: string;
 
-  // 🔐 Device Sessions
-  deviceSessions?: DeviceSessionType[];
-
   // 🔗 Relation
   userId?: mongoose.Types.ObjectId;
 

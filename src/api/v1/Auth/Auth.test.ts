@@ -103,10 +103,6 @@ describe("Auth Model Schema", () => {
     expect(AuthSchema.path("refreshTokens")).toBeDefined();
   });
 
-  it("should have deviceSessions subdocument array", () => {
-    expect(AuthSchema.path("deviceSessions")).toBeDefined();
-  });
-
   it("should enable timestamps", () => {
     expect(AuthSchema.options.timestamps).toBe(true);
   });
