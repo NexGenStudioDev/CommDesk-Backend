@@ -7,10 +7,7 @@ class MemberUtils {
   };
 
   FIND_Member_BY_EMAIL = async (Email: string) => {
-
-   return await MemberModel.findOne({email: Email });
-
-    
+    return await MemberModel.findOne({ email: Email });
   };
 }
 
