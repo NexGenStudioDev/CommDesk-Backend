@@ -34,7 +34,8 @@ class MemberController {
         throw new Error("Member already exists");
       }
 
-      const randomPassword = randomBytes(32).toString("hex");
+      const randomPassword = randomBytes(7).toString("hex");
+      console.log("random password", randomPassword);
 
       const Auth = await authService.createUser({
         email,
