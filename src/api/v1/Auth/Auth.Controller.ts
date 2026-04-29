@@ -103,47 +103,51 @@ class AuthController {
   }
 
   public async LoginUser(req: Request, res: Response) {
-  try {
-    // 1. Get email and password from req.body
-    let { email, password } = req.body;
+    try {
+      // 1. Get email and password from req.body
+      let { email, password } = req.body;
 
-    // 2. Find user by email
-    let FindUser = await authUtils.FIND_USER_BY_EMAIL(email);
+      // 2. Find user by email
+      let FindUser = await authUtils.FIND_USER_BY_EMAIL(email);
 
-    // 3. If user not found, return error
-    if (!FindUser) {
-      throw new Error("Login failed: Email or password is incorrect.");
-    }
-
-    // 4. Compare password hash with original password
-    let comparePass = await authUtils.comparePassword(password, FindUser.passwordHash);
-
-    // 5. Handle invalid password and track failed login attempts
-    if (!comparePass) {
-    
-      let failedLoginAttempts: number = await authUtils.failedLoginAttempts(String(FindUser._id));
-
-    
-      if (failedLoginAttempts >= 5) {
-        await authUtils.banUser(String(FindUser._id));
-        throw new Error(
-          `Your account has been temporarily banned due to ${failedLoginAttempts} failed login attempts. Please try again later or contact support.`
-        );
-      } else {
-        const attemptsLeft = 5 - failedLoginAttempts;
-        throw new Error(`Invalid password. You have ${attemptsLeft} more attempt(s) before your account is temporarily banned for 45 min.`);
+      // 3. If user not found, return error
+      if (!FindUser) {
+        throw new Error("Login failed: Email or password is incorrect.");
       }
+
+      // 4. Compare password hash with original password
+      let comparePass = await authUtils.comparePassword(
+        password,
+        FindUser.passwordHash,
+      );
+
+      // 5. Handle invalid password and track failed login attempts
+      if (!comparePass) {
+        let failedLoginAttempts: number = await authUtils.failedLoginAttempts(
+          String(FindUser._id),
+        );
+
+        if (failedLoginAttempts >= 5) {
+          await authUtils.banUser(String(FindUser._id));
+          throw new Error(
+            `Your account has been temporarily banned due to ${failedLoginAttempts} failed login attempts. Please try again later or contact support.`,
+          );
+        } else {
+          const attemptsLeft = 5 - failedLoginAttempts;
+          throw new Error(
+            `Invalid password. You have ${attemptsLeft} more attempt(s) before your account is temporarily banned for 45 min.`,
+          );
+        }
+      }
+
+      // 6. Generate token and set it in cookie and header (assuming this happens inside SendResponse.SuccessResponse or elsewhere)
+
+      console.log("Compare Password", comparePass);
+      SendResponse.SuccessResponse(res, FindUser, "Login successful.");
+    } catch (error: any) {
+      SendResponse.ErrorResponse(res, error, error.message);
     }
-
-    // 6. Generate token and set it in cookie and header (assuming this happens inside SendResponse.SuccessResponse or elsewhere)
-
-    console.log("Compare Password", comparePass);
-    SendResponse.SuccessResponse(res, FindUser, "Login successful.");
-  } catch (error: any) {
-    SendResponse.ErrorResponse(res, error, error.message);
   }
-}
-
 
   public async ForgotPassword(req: Request, res: Response) {}
 }
