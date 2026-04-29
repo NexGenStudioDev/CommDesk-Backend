@@ -6,9 +6,9 @@
 
 A **distributed, fault-tolerant, event-driven processing system** using:
 
-* BullMQ (queue engine)
-* Redis (job store)
-* Workers (processing layer)
+- BullMQ (queue engine)
+- Redis (job store)
+- Workers (processing layer)
 
 ---
 
@@ -169,10 +169,10 @@ Isolation + scaling + reliability
 ## Queues
 
 ```ts
-eventQueue
-webhookQueue
-retryQueue
-priorityQueue
+eventQueue;
+webhookQueue;
+retryQueue;
+priorityQueue;
 ```
 
 ---
@@ -360,17 +360,17 @@ Failed after max retries
 ## Signature
 
 ```ts
-HMAC_SHA256(secret, timestamp + body)
+HMAC_SHA256(secret, timestamp + body);
 ```
 
 ---
 
 ## Must Implement
 
-* SSRF protection
-* timeout enforcement
-* IP filtering
-* replay attack prevention
+- SSRF protection
+- timeout enforcement
+- IP filtering
+- replay attack prevention
 
 ---
 
@@ -456,9 +456,9 @@ worker crashes
 
 ## Techniques
 
-* batch DB queries
-* Redis caching
-* worker scaling
+- batch DB queries
+- Redis caching
+- worker scaling
 
 ---
 
@@ -493,10 +493,10 @@ external API failure
 
 ## Must Test
 
-* enqueue job
-* worker execution
-* retry logic
-* failure handling
+- enqueue job
+- worker execution
+- retry logic
+- failure handling
 
 ---
 
@@ -556,4 +556,3 @@ Workers are execution
 Logs are visibility
 Retries are reliability
 ```
-

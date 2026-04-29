@@ -1,10 +1,7 @@
-import { Request , Response } from "express"
+import { Request, Response } from "express";
 
-class EventController{
-   createNewEvent = async(req: Request, res: Response) => {
-
-   }
+class EventController {
+  createNewEvent = async (req: Request, res: Response) => {};
 }
 
-
-export const eventController = new EventController()
+export const eventController = new EventController();

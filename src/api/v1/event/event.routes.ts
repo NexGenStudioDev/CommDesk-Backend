@@ -1,8 +1,4 @@
 import { Router } from "express";
-const route = Router()
+const route = Router();
 
-
-
-
-
-export { route as EventRoutes }
+export { route as EventRoutes };

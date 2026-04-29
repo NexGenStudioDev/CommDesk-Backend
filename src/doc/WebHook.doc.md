@@ -8,11 +8,11 @@ A **production-grade event-driven webhook system** built using MERN stack, desig
 
 This system captures internal & external events and delivers them to configured destinations such as:
 
-* Discord
-* Github
-* External APIs (HTTP Webhooks)
-* Internal services
-* Apps / Real-time UI
+- Discord
+- Github
+- External APIs (HTTP Webhooks)
+- Internal services
+- Apps / Real-time UI
 
 ---
 
@@ -180,10 +180,10 @@ HMAC_SHA256(secret, timestamp + body)
 
 ## Protection
 
-* SSRF Protection (block localhost/private IPs)
-* Replay Attack Protection (timestamp validation)
-* Rate Limiting
-* Secret encryption (never returned in API)
+- SSRF Protection (block localhost/private IPs)
+- Replay Attack Protection (timestamp validation)
+- Rate Limiting
+- Secret encryption (never returned in API)
 
 ---
 
@@ -195,9 +195,7 @@ HMAC_SHA256(secret, timestamp + body)
 
 ```ts
 {
-  eventId,
-  webhookId,
-  attempt
+  (eventId, webhookId, attempt);
 }
 ```
 
@@ -233,8 +231,8 @@ Fetch Event
 
 ## Dead Letter Queue
 
-* Failed permanently
-* Manual retry supported
+- Failed permanently
+- Manual retry supported
 
 ---
 
@@ -260,11 +258,7 @@ Blind → No debugging → No trust → Not production-ready
 
 ```ts
 {
-  eventId,
-  type,
-  status,
-  createdAt,
-  processedAt
+  (eventId, type, status, createdAt, processedAt);
 }
 ```
 
@@ -317,10 +311,10 @@ Blind → No debugging → No trust → Not production-ready
 
 ```ts
 {
-  type: "invalid_signature" | "rate_limit" | "ssrf_blocked",
-  ip,
-  webhookId,
-  timestamp
+  type: ("invalid_signature" | "rate_limit" | "ssrf_blocked",
+    ip,
+    webhookId,
+    timestamp);
 }
 ```
 
@@ -341,9 +335,9 @@ Blind → No debugging → No trust → Not production-ready
 
 ## 📌 Log Storage Strategy
 
-* MongoDB → structured logs
-* Console/File → dev logs
-* Optional → ELK / Loki (production)
+- MongoDB → structured logs
+- Console/File → dev logs
+- Optional → ELK / Loki (production)
 
 ---
 
@@ -363,9 +357,9 @@ avg response time
 
 Trigger alerts when:
 
-* failure rate > threshold
-* queue backlog increases
-* repeated webhook failures
+- failure rate > threshold
+- queue backlog increases
+- repeated webhook failures
 
 ---
 
@@ -429,17 +423,17 @@ src/
 
 ## Backend
 
-* webhook delivery
-* retry system
-* signature validation
+- webhook delivery
+- retry system
+- signature validation
 
 ---
 
 ## Security
 
-* SSRF attacks
-* replay attacks
-* invalid signatures
+- SSRF attacks
+- replay attacks
+- invalid signatures
 
 ---
 
@@ -449,9 +443,9 @@ src/
 
 ## Optimization
 
-* Redis caching
-* worker scaling
-* batch DB queries
+- Redis caching
+- worker scaling
+- batch DB queries
 
 ---
 
@@ -480,13 +474,13 @@ PROD
 
 # ✅ Acceptance Criteria
 
-* Webhook setup works
-* Event system works
-* Delivery system works
-* Retry system works
-* Logs visible
-* Secure system
-* Scalable architecture
+- Webhook setup works
+- Event system works
+- Delivery system works
+- Retry system works
+- Logs visible
+- Secure system
+- Scalable architecture
 
 ---
 
@@ -515,4 +509,3 @@ Your system will fail in production
 ```
 
 Logs are not optional — they are **core infrastructure**.
-

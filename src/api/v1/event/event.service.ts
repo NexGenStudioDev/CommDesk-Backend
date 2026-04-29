@@ -1,6 +1,3 @@
-class EventService{
+class EventService {}
 
-}
-
-
-export const eventService = new EventService()
+export const eventService = new EventService();

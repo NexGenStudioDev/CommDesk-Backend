@@ -1,5 +1,3 @@
-class EventUtils{
+class EventUtils {}
 
-}
-
-export const eventUtils = new EventUtils()
+export const eventUtils = new EventUtils();
