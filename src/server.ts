@@ -11,6 +11,7 @@ import { env_Constant } from "./constants/env.constant";
 import { connectDB } from "./core/database/db.config";
 import DeviceSessionUtils from "./api/v1/DeviceSession/DeviceSession.Utils";
 import app from "./app";
+import RabbitMQ_connection from "./infrastructure/queue/connection";
 
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";
@@ -58,6 +59,7 @@ app.get("/", async (req: express.Request, res: express.Response) => {
 const startServer = async () => {
   try {
     await connectDB();
+    await RabbitMQ_connection();
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

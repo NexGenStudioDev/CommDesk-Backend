@@ -1,37 +1,70 @@
-version: "3.8"
-
 services:
   app:
     build: .
+    container_name: commdesk-app
     ports:
-      - "3000:3000"
+      - "5000:5000"
     depends_on:
       mongo:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     env_file:
-      - ./.env
-    environment:
-      MONGO_URI: mongodb://mongo:27017/CommDesk
-      NODE_ENV: development
+      - .env.docker
     restart: unless-stopped
     networks:
       - commdesk-net
 
   mongo:
-    image: mongodb/mongodb-community-server:7.0-ubuntu2204
+    image: mongo
     container_name: commdesk-mongo
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    restart: unless-stopped
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
     networks:
       - commdesk-net
+    volumes:
+      - mongo-data:/data/db
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.runCommand({ ping: 1 })"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 20s
+
+  mongo-express:
+    image: mongo-express
+    container_name: commdesk-mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_BASICAUTH_ENABLED: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: mongoexpressuser
+      ME_CONFIG_BASICAUTH_PASSWORD: mongoexpresspass
+    networks:
+      - commdesk-net
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: commdesk-rabbitmq
+    ports:
+      - "5675:5672"
+      - "15680:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    restart: unless-stopped
+    networks:
+      - commdesk-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
 
 volumes:
   mongo-data:

@@ -1,4 +1,4 @@
-import { describe, test } from "@jest/globals";
+import { describe, expect, test } from "@jest/globals";
 import { OrganizationData } from "../Auth/Auth.test";
 import { memberUtils } from "./Member.Utils";
 
