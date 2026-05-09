@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { permissionService } from "../Permission/Permission.service";
-
+import jwt from "jsonwebtoken";
 import { Default_Organization_Permissions } from "../Permission/Permission.constant";
 import { communityService } from "../Community/Community.Service";
 import { authService } from "./Auth.Service";
@@ -10,8 +10,36 @@ import SendResponse from "../../../utils/SendResponse";
 import { memberService } from "../Member/Member.Service";
 import slugify from "slugify";
 import { memberUtils } from "../Member/Member.Utils";
+import { env_Constant } from "../../../constants/env.constant";
 
 class AuthController {
+  private async setAuthCookiesAndHeaders(
+    res: Response,
+    tokens: { accessToken: string; refreshToken: string },
+  ) {
+    const isProd = env_Constant.NODE_ENV === "production";
+
+    const commonOptions = {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: "strict" as const,
+    };
+
+    // 1. Set Access Token (Short-lived)
+    res.cookie("accessToken", tokens.accessToken, {
+      ...commonOptions,
+      maxAge: 15 * 60 * 1000, // 15 mins
+    });
+
+    // 2. Set Refresh Token (Long-lived)
+    // Optimization: Only send this cookie when the user hits the /refresh route
+    res.cookie("refreshToken", tokens.refreshToken, {
+      ...commonOptions,
+      path: "/api/auth/refresh", // Browser only sends it to this specific URL
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+  }
+
   public async CommunitySignUp(req: Request, res: Response) {
     try {
       const {
@@ -104,24 +132,19 @@ class AuthController {
 
   public async LoginUser(req: Request, res: Response) {
     try {
-      // 1. Get email and password from req.body
       let { email, password } = req.body;
 
-      // 2. Find user by email
       let FindUser = await authUtils.FIND_USER_BY_EMAIL(email);
 
-      // 3. If user not found, return error
       if (!FindUser) {
-        throw new Error("Login failed: Email or password is incorrect.");
+        throw new Error(AuthConstant.USER_NOT_FOUND);
       }
 
-      // 4. Compare password hash with original password
       let comparePass = await authUtils.comparePassword(
         password,
         FindUser.passwordHash,
       );
 
-      // 5. Handle invalid password and track failed login attempts
       if (!comparePass) {
         let failedLoginAttempts: number = await authUtils.failedLoginAttempts(
           String(FindUser._id),
@@ -142,7 +165,15 @@ class AuthController {
 
       // 6. Generate token and set it in cookie and header (assuming this happens inside SendResponse.SuccessResponse or elsewhere)
 
-      console.log("Compare Password", comparePass);
+      let {accessToken , refreshToken } = await authUtils.generateAuthTokens({
+        _id: String(FindUser._id),
+        email: FindUser.email,
+        role: FindUser.role,
+        ip: req.ip,
+      });
+
+      this.setAuthCookiesAndHeaders(res, { accessToken, refreshToken });
+
       SendResponse.SuccessResponse(res, FindUser, "Login successful.");
     } catch (error: any) {
       SendResponse.ErrorResponse(res, error, error.message);

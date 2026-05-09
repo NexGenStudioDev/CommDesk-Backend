@@ -1,0 +1,26 @@
+[0;1;32m●[0m rabbitmq.service - RabbitMQ broker
+     Loaded: loaded (]8;;file://developer-hplaptop15sgr0xxx/usr/lib/systemd/system/rabbitmq.service\/usr/lib/systemd/system/rabbitmq.service]8;;\; [0;1;32menabled[0m; preset: [0;1;38:5:185mdisabled[0m)
+     Active: [0;1;32mactive (running)[0m since Sat 2026-05-09 14:49:37 IST; 8min ago
+ Invocation: 8a9c6ca52f0947759acec05491c113f5
+   Main PID: 981 (beam.smp)
+      Tasks: 37[0;38:5:245m (limit: 16622)[0m
+     Memory: 112.4M (peak: 157.7M)
+        CPU: 6.823s
+     CGroup: /system.slice/rabbitmq.service
+             ├─[0;38:5:245m 981 /usr/lib/erlang/erts-16.3.1/bin/beam.smp -W w -MBas ageffcbf -MHas ageffcbf -MBlmbcs 512 -MHlmbcs 512 -MMmcs 30 -pc unicode -P 1048576 -t 5000000 -stbt db -zdbbl 128000 -sbwt none -sbwtdcpu none -sbwtdio none -- -root /usr/lib/erlang -bindir /usr/lib/erlang/erts-16.3.1/bin -progname erl -- -home /var/lib/rabbitmq -- -pa "" -noshell -noinput -s rabbit boot -boot start_sasl -syslog logger "[]" -syslog syslog_error_logger false -kernel prevent_overlapping_partitions false --[0m
+             ├─[0;38:5:245m1003 erl_child_setup 1024[0m
+             ├─[0;38:5:245m1049 /usr/lib/erlang/erts-16.3.1/bin/inet_gethost 4[0m
+             ├─[0;38:5:245m1050 /usr/lib/erlang/erts-16.3.1/bin/inet_gethost 4[0m
+             ├─[0;38:5:245m1059 /usr/lib/erlang/erts-16.3.1/bin/epmd -daemon[0m
+             └─[0;38:5:245m1185 /bin/sh -s rabbit_disk_monitor[0m
+
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Doc guides:  https://www.rabbitmq.com/docs
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Support:     https://www.rabbitmq.com/docs/contact
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Tutorials:   https://www.rabbitmq.com/tutorials
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Monitoring:  https://www.rabbitmq.com/docs/monitoring
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Upgrading:   https://www.rabbitmq.com/docs/upgrade
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Logs: /var/log/rabbitmq/rabbit@developer-hplaptop15sgr0xxx.log
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:         <stdout>
+May 09 14:49:35 developer-hplaptop15sgr0xxx rabbitmq[981]:   Config file(s): (none)
+May 09 14:49:37 developer-hplaptop15sgr0xxx rabbitmq[981]:   Starting broker... completed with 3 plugins.
+May 09 14:49:37 developer-hplaptop15sgr0xxx systemd[1]: Started RabbitMQ broker.
