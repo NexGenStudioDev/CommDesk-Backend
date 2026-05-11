@@ -4,6 +4,7 @@ export let AuthConstant = {
     "🎉 Your community account has been successfully created! 📩 To activate your account, please verify it through the email we’ve sent you.",
   USER_NOT_FOUND: "User not found",
   INVALID_PASSWORD: "Invalid password",
+  INVALID_CREDENTIALS: "Invalid credentials",
   TOKEN_EXPIRED: "Token expired",
   INVALID_TOKEN: "Invalid token",
 };

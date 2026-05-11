@@ -12,6 +12,9 @@ import { connectDB } from "./core/database/db.config";
 import DeviceSessionUtils from "./api/v1/DeviceSession/DeviceSession.Utils";
 import app from "./app";
 
+import { initializeGlobalChannel } from "./infrastructure/queue/channel";
+import Consumers from "./infrastructure/queue/queue.consumers";
+
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";
 
@@ -58,6 +61,8 @@ app.get("/", async (req: express.Request, res: express.Response) => {
 const startServer = async () => {
   try {
     await connectDB();
+    await initializeGlobalChannel();
+    await Consumers();
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
