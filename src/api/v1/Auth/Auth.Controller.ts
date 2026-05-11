@@ -11,6 +11,8 @@ import { memberService } from "../Member/Member.Service";
 import slugify from "slugify";
 import { memberUtils } from "../Member/Member.Utils";
 import { env_Constant } from "../../../constants/env.constant";
+import EmailConsumerManager from "../../../infrastructure/email/Utils/EmailConsumers";
+import EmailPublisher from "../../../infrastructure/email/Utils/Email.publisher";
 
 class AuthController {
   private async setAuthCookiesAndHeaders(
@@ -105,6 +107,12 @@ class AuthController {
             onboardingSource: "website",
           });
         }
+
+        // Queue Community Signup Welcome Email
+        await EmailPublisher.sendCommunitySignupEmail({
+          email: CreateNewCommunity.OfficialEmail,
+          communityName: CreateNewCommunity.CommunityName,
+        });
       }
 
       SendResponse.SuccessResponse(
@@ -152,20 +160,24 @@ class AuthController {
 
         if (failedLoginAttempts >= 5) {
           await authUtils.banUser(String(FindUser._id));
-          throw new Error(
-            `Your account has been temporarily banned due to ${failedLoginAttempts} failed login attempts. Please try again later or contact support.`,
-          );
+
+          // Queue account banned email
+          const unbannedAt = new Date(Date.now() + 30 * 60 * 1000); // 30 minutes from now
+          await EmailPublisher.sendAccountBannedEmail({
+            email: FindUser.email,
+            unbannedAt,
+          });
         } else {
           const attemptsLeft = 5 - failedLoginAttempts;
           throw new Error(
-            `Invalid password. You have ${attemptsLeft} more attempt(s) before your account is temporarily banned for 45 min.`,
+            `Invalid password. You have ${attemptsLeft} more attempt(s) before your account is temporarily banned for 30 min.`,
           );
         }
       }
 
       // 6. Generate token and set it in cookie and header (assuming this happens inside SendResponse.SuccessResponse or elsewhere)
 
-      let {accessToken , refreshToken } = await authUtils.generateAuthTokens({
+      let { accessToken, refreshToken } = await authUtils.generateAuthTokens({
         _id: String(FindUser._id),
         email: FindUser.email,
         role: FindUser.role,

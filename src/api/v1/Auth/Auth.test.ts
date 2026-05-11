@@ -23,6 +23,8 @@ import {
 import { AuthSchema } from "./Auth.model";
 import supertest, { Response } from "supertest";
 import app from "../../../app";
+import { initializeGlobalChannel } from "../../../infrastructure/queue/channel";
+import Consumers from "../../../infrastructure/queue/queue.consumers";
 
 // ✅ Increase timeout (DB + async ops need time)
 jest.setTimeout(30000);
@@ -30,6 +32,8 @@ jest.setTimeout(30000);
 beforeAll(async () => {
   try {
     await connectDB();
+    await initializeGlobalChannel();
+    await Consumers();
   } catch (err) {
     console.error("Mongo setup failed:", err);
     throw err;
@@ -184,6 +188,8 @@ describe("Check Auth API Endpoints", () => {
       const res: Response = await supertest(app)
         .post("/api/v1/signup/community")
         .send(OrganizationData);
+
+      console.log("Create Organization API Response:", res.body);
 
       expect(res.status).toBe(200);
       expect(res.body).toBeDefined();
