@@ -7,6 +7,7 @@ async function Consumers() {
     await Promise.all([
       EmailConsumers.registerCommunitySignupConsumer(),
       EmailConsumers.registerAccountBannedConsumer(),
+      EmailConsumers.forgotPasswordConsumer(),
       EmailWorker.initialize(),
     ]);
 

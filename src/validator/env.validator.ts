@@ -1,6 +1,7 @@
 import zod from "zod";
 
 export const envSchema = zod.object({
+  FRONTEND_URL: zod.string(),
   PORT: zod.string().default("3000"),
   RABBITMQ_URL: zod.string(),
   MONGO_URI: zod.string(),
