@@ -96,6 +96,53 @@ class EmailConsumers {
       "🚫 Account banned consumer started",
     );
   }
+
+  public async forgotPasswordConsumer(): Promise<void> {
+    await QueueService.createQueue(QueueNames.FORGOT_PASSWORD);
+
+    await QueueService.consumeMessages<{ email: string; resetLink: string }>(
+      QueueNames.FORGOT_PASSWORD,
+
+      async (payload, message) => {
+        try {
+          const forgotPasswordContent = EmailTemplates.forgotPasswordTemplate(
+            payload.resetLink,
+          );
+
+          await EmailService.transporter().sendMail({
+            to: payload.email,
+            subject: "Password Reset Request",
+            html: forgotPasswordContent.html,
+            text: forgotPasswordContent.text,
+          });
+
+          PinoLogger.info(
+            {
+              queue: QueueNames.FORGOT_PASSWORD,
+              email: payload.email,
+            },
+            "🔑 Forgot password consumed → email sent",
+          );
+        } catch (error) {
+          PinoLogger.error(
+            {
+              queue: QueueNames.FORGOT_PASSWORD,
+              email: payload.email,
+              error,
+            },
+            "❌ Error processing forgot password",
+          );
+        }
+      },
+    );
+
+    PinoLogger.info(
+      {
+        queue: QueueNames.FORGOT_PASSWORD,
+      },
+      "🔑 Forgot password consumer started",
+    );
+  }
 }
 
 export default new EmailConsumers();

@@ -192,7 +192,32 @@ class AuthController {
     }
   }
 
-  public async ForgotPassword(req: Request, res: Response) {}
+  public async ForgotPassword(req: Request, res: Response) {
+    let email: string = req.body.email;
+
+    try {
+      let FindUser = await authUtils.FIND_USER_BY_EMAIL(email);
+      if (!FindUser) {
+        throw new Error(AuthConstant.USER_NOT_FOUND);
+      }
+
+      // Generate a password reset token (could be JWT or a random string stored in DB)
+      const resetToken = jwt.sign(
+        { userId: FindUser._id },
+        env_Constant.JWT_ACCESS_SECRET,
+        { expiresIn: "1h" },
+      );
+
+      const resetLink = `${env_Constant.FRONTEND_URL}/reset-password?email=${email}&token=${resetToken}`;
+
+      // Queue forgot password email
+      await EmailPublisher.sendForgotPasswordEmail(email, resetLink);
+
+      SendResponse.SuccessResponse(res, null, "Password reset email sent.");
+    } catch (error: any) {
+      SendResponse.ErrorResponse(res, error, error.message);
+    }
+  }
 }
 
 export default new AuthController();

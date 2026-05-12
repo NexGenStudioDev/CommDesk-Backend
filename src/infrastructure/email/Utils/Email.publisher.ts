@@ -69,6 +69,27 @@ class EmailPublisher {
       "📨 Account banned email queued",
     );
   }
+
+  public async sendForgotPasswordEmail(
+    email: string,
+    resetLink: string,
+  ): Promise<void> {
+    const template = EmailTemplates.forgotPasswordTemplate(resetLink);
+
+    await QueueService.publishToQueue(QueueNames.EMAIL_TASK, {
+      to: email,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
+
+    Pino_logger.info(
+      {
+        email,
+      },
+      "📨 Forgot password email queued",
+    );
+  }
 }
 
 export default new EmailPublisher();

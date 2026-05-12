@@ -193,6 +193,166 @@ If this wasn't you, please secure your account immediately by changing your pass
 This is an automated email. Please do not reply.
     `,
   }),
+
+  /**
+   * Forgot Password Email
+   */
+  forgotPasswordTemplate: (resetLink: string) => ({
+    subject: "🔐 Reset Your CommDesk Password",
+
+    html: `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+          }
+
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+          }
+
+          .card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+          }
+
+          .header {
+            background: #2563eb;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+          }
+
+          .header h1 {
+            margin: 0;
+            font-size: 26px;
+          }
+
+          .content {
+            padding: 30px 25px;
+          }
+
+          .button {
+            display: inline-block;
+            background: #2563eb;
+            color: white !important;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 20px 0;
+          }
+
+          .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+          }
+
+          .footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #666;
+            border-top: 1px solid #eee;
+          }
+
+          .link-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 5px;
+            word-break: break-word;
+            font-size: 13px;
+            margin-top: 15px;
+          }
+        </style>
+      </head>
+
+      <body>
+        <div class="container">
+          <div class="card">
+
+            <div class="header">
+              <h1>🔐 Password Reset Request</h1>
+            </div>
+
+            <div class="content">
+              <p>Hello,</p>
+
+              <p>
+                We received a request to reset your CommDesk account password.
+              </p>
+
+              <p>
+                Click the button below to create a new password:
+              </p>
+
+              <a href="${resetLink}" class="button">
+                Reset Password
+              </a>
+
+              <div class="warning">
+                <strong>⚠️ Important:</strong>
+                This password reset link will expire in 15 minutes for security reasons.
+              </div>
+
+              <p>
+                If the button above does not work, copy and paste this link into your browser:
+              </p>
+
+              <div class="link-box">
+                ${resetLink}
+              </div>
+
+              <p style="margin-top: 30px;">
+                If you did not request a password reset, you can safely ignore this email.
+                Your account will remain secure.
+              </p>
+            </div>
+
+            <div class="footer">
+              <p>&copy; 2026 CommDesk. All rights reserved.</p>
+              <p>This is an automated email. Please do not reply.</p>
+            </div>
+
+          </div>
+        </div>
+      </body>
+    </html>
+  `,
+
+    text: `
+Reset Your CommDesk Password
+
+Hello,
+
+We received a request to reset your CommDesk account password.
+
+Use the link below to reset your password:
+
+${resetLink}
+
+Important:
+- This reset link will expire in 15 minutes.
+- If you did not request this password reset, you can safely ignore this email.
+
+© 2026 CommDesk. All rights reserved.
+This is an automated email. Please do not reply.
+  `,
+  }),
 };
 
 export default EmailTemplates;
