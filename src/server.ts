@@ -14,6 +14,7 @@ import app from "./app";
 
 import { initializeGlobalChannel } from "./infrastructure/queue/channel";
 import Consumers from "./infrastructure/queue/queue.consumers";
+import { paymentUtils } from "./api/v1/Payment/Payment.Utils";
 
 const isProduction = env_Constant.NODE_ENV === "production";
 const isTest = env_Constant.NODE_ENV === "test";
@@ -63,6 +64,8 @@ const startServer = async () => {
     await connectDB();
     await initializeGlobalChannel();
     await Consumers();
+
+ 
 
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);

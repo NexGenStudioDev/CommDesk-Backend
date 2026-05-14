@@ -9,6 +9,7 @@ export const envSchema = zod.object({
   JWT_REFRESH_SECRET: zod.string(),
   CashFresh_API_KEY: zod.string(),
   CashFresh_API_SECRET: zod.string(),
+  CashFree_Url: zod.string(),
   SMTP_USER: zod.string(),
   SMTP_PASS: zod.string(),
   NODE_ENV: zod.enum(["development", "production", "test"]).default("test"),

@@ -218,6 +218,13 @@ class AuthController {
       SendResponse.ErrorResponse(res, error, error.message);
     }
   }
+
+  public async changePassword(req: Request, res: Response) {
+    let { email, token } = req.query;
+
+    // This would be the endpoint hit when user clicks the reset link and submits new password
+    // Implementation would involve verifying the reset token, allowing user to set new password, etc.
+  }
 }
 
 export default new AuthController();
