@@ -69,7 +69,9 @@ class AuthController {
       if (path) {
         cloudinary = await cloudinaryUtils.uploadImage(String(path));
       } else {
-        cloudinary = { secure_url: LogoUrl || "https://via.placeholder.com/150" };
+        cloudinary = {
+          secure_url: LogoUrl || "https://via.placeholder.com/150",
+        };
       }
 
       if (OfficialEmail === owner.email) {
