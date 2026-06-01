@@ -6,9 +6,22 @@ import { authService } from "../Auth/Auth.Service";
 import { randomBytes } from "crypto";
 import { ROLE_CONSTANT } from "../Auth/Auth.Constant";
 import { memberUtils } from "./Member.Utils";
+import { permissionService } from "../Permission/Permission.service";
+import { memberPermission } from "../Permission/Permission.constant";
 
 class MemberController {
   createNewMember = async (req: Request, res: Response) => {
+    let userId = (req as Request & { userId?: string }).userId;
+
+    let checkPermissions = await permissionService.check_UserPermission(
+      String(userId),
+      memberPermission.CREATE_MEMBER,
+    );
+
+    if (!checkPermissions) {
+      throw new Error("Forbidden: You don't have permission to create members");
+    }
+
     const session = await mongoose.startSession();
     session.startTransaction();
 

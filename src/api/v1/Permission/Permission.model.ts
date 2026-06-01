@@ -5,30 +5,48 @@ export type PermissionSchemaType = {
   action: "create" | "read" | "update" | "delete"; // create, read, update, delete
   resource: string; // create event , read event, update event, delete event
   description?: string;
-  userId: string | null; // Reference to the user who created the permission
+  level?: number; // 0..100 where 100 is master
 };
 
-const permissionSchema = new mongoose.Schema<PermissionSchemaType>(
+export type PermissionDocument = mongoose.Document & {
+  permission: PermissionSchemaType[];
+  userId: string | null;
+};
+
+const permission = new mongoose.Schema<PermissionSchemaType>(
   {
     name: {
       type: String,
       required: true,
       unique: true,
+      index: true,
     },
     action: {
       type: String, // create, read, update, delete
       required: true,
     },
     resource: {
-      type: String, // create event , read event, update event, delete event
+      type: String,
       required: true,
     },
     description: String,
+    level: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+  },
+  { timestamps: true },
+);
 
+const permissionSchema = new mongoose.Schema<PermissionDocument>(
+  {
+    permission: [permission],
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId, // Reference to the user who created the permission
       ref: "Auth",
-      required: true,
+      default: null,
     },
   },
   { timestamps: true },

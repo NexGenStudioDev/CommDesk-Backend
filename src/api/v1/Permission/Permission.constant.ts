@@ -17,12 +17,6 @@ export const User_Permissions = {
   UPDATE_USERS: "user:update",
 };
 
-export const Organization_Permissions = {
-  VIEW_ORGANIZATIONS: "organization:view",
-  DELETE_ORGANIZATIONS: "organization:delete",
-  UPDATE_ORGANIZATIONS: "organization:update",
-};
-
 export const Judge_Permissions = {
   ASSIGN_JUDGES: "judge:assign",
   ADD_JUDGES: "judge:add",
@@ -46,101 +40,41 @@ export const Mentor_Permissions = {
   UPDATE_MENTORS: "mentor:update",
 };
 
-export const Default_Participant_Permissions: PermissionSchemaType[] = [
-  {
-    name: "View Event",
-    action: "read",
-    resource: Event_Permissions.VIEW_EVENT,
-    description: "Permission to view events",
-    userId: null,
-  },
-  {
-    name: "Join Event",
-    action: "update",
-    resource: Event_Permissions.JOIN_EVENT,
-    description: "Permission to join events",
-    userId: null,
-  },
-  {
-    name: "Leave Event",
-    action: "update",
-    resource: Event_Permissions.LEAVE_EVENT,
-    description: "Permission to leave events",
-    userId: null,
-  },
-];
+export const memberPermission = {
+  CREATE_MEMBER: "member:create",
+  UPDATE_MEMBER: "member:update",
+  DELETE_MEMBER: "member:delete",
+  VIEW_MEMBER: "member:view",
+};
 
 export const Default_Organization_Permissions: PermissionSchemaType[] = [
   {
-    name: "Create Event",
+    name: memberPermission.VIEW_MEMBER,
+    action: "read",
+    resource: "organization",
+  },
+  {
+    name: memberPermission.UPDATE_MEMBER,
+    action: "update",
+    resource: "organization",
+  },
+  {
+    name: memberPermission.DELETE_MEMBER,
+    action: "delete",
+    resource: "organization",
+  },
+  {
+    name: memberPermission.CREATE_MEMBER,
     action: "create",
-    resource: Event_Permissions.CREATE_EVENT,
-    description: "Permission to create events",
-    userId: null,
+    resource: "create New Member",
+    description: "Permission to create new members in the organization",
   },
+];
 
+export const Default_Member_Permissions: PermissionSchemaType[] = [
   {
-    name: "Update Event",
-    action: "update",
-    resource: Event_Permissions.UPDATE_EVENT,
-    description: "Permission to update events",
-    userId: null,
-  },
-  {
-    name: "Delete Event",
-    action: "delete",
-    resource: Event_Permissions.DELETE_EVENT,
-    description: "Permission to delete events",
-    userId: null,
-  },
-  {
-    name: "View Event",
+    name: memberPermission.VIEW_MEMBER,
     action: "read",
-    resource: Event_Permissions.VIEW_EVENT,
-    description: "Permission to view events",
-    userId: null,
-  },
-  {
-    name: "Publish Event",
-    action: "update",
-    resource: Event_Permissions.PUBLISH_EVENT,
-    description: "Permission to publish events",
-    userId: null,
-  },
-  {
-    name: "Delete Event",
-    action: "delete",
-    resource: Event_Permissions.DELETE_EVENT,
-    description: "Permission to delete events",
-    userId: null,
-  },
-
-  {
-    name: "Delete User",
-    action: "delete",
-    resource: User_Permissions.DELETE_USERS,
-    description: "Permission to delete users",
-    userId: null,
-  },
-  {
-    name: "Read User",
-    action: "read",
-    resource: User_Permissions.READ_USERS,
-    description: "Permission to read user information",
-    userId: null,
-  },
-  {
-    name: "View Organization",
-    action: "read",
-    resource: Organization_Permissions.VIEW_ORGANIZATIONS,
-    description: "Permission to view organizations",
-    userId: null,
-  },
-  {
-    name: "Update Organization",
-    action: "update",
-    resource: Organization_Permissions.UPDATE_ORGANIZATIONS,
-    description: "Permission to update organizations",
-    userId: null,
+    resource: "View Member",
   },
 ];

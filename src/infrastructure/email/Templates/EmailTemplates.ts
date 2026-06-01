@@ -4,95 +4,334 @@
  */
 
 export const EmailTemplates = {
-  /**
-   * Community Signup Welcome Email
-   */
   communitySignup: (data: {
     communityName: string;
     email: string;
     website?: string;
   }) => ({
-    subject: `Welcome to CommDesk - ${data.communityName} Community Created!`,
+    subject: `Welcome to CommDesk 🚀 ${data.communityName} is Under Review`,
+
     html: `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <style>
-            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-            .container { max-width: 600px; margin: 0 auto; padding: 20px; background: #f9f9f9; }
-            .header { background: #007bff; color: white; padding: 20px; text-align: center; border-radius: 5px 5px 0 0; }
-            .content { background: white; padding: 20px; border: 1px solid #ddd; }
-            .footer { background: #f9f9f9; padding: 15px; text-align: center; font-size: 12px; color: #666; border: 1px solid #ddd; border-radius: 0 0 5px 5px; }
-            .button { display: inline-block; background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; margin: 15px 0; }
-            h1 { margin: 0; font-size: 24px; }
-            .highlight { background: #fff3cd; padding: 10px; border-left: 4px solid #ffc107; margin: 15px 0; }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>🎉 Community Created Successfully!</h1>
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+
+        body {
+          font-family: Inter, Arial, sans-serif;
+          background: #f4f7fb;
+          color: #111827;
+          line-height: 1.6;
+          padding: 30px 15px;
+        }
+
+        .wrapper {
+          max-width: 620px;
+          margin: auto;
+        }
+
+        .card {
+          background: #ffffff;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow:
+            0 10px 25px rgba(0,0,0,0.06),
+            0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .hero {
+          background: linear-gradient(135deg, #2563eb, #4f46e5);
+          padding: 50px 30px;
+          text-align: center;
+          color: white;
+        }
+
+        .hero h1 {
+          font-size: 30px;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+
+        .hero p {
+          font-size: 15px;
+          opacity: 0.95;
+        }
+
+        .content {
+          padding: 35px 30px;
+        }
+
+        .badge {
+          display: inline-block;
+          background: #ecfdf3;
+          color: #027a48;
+          border: 1px solid #abefc6;
+          padding: 8px 14px;
+          border-radius: 999px;
+          font-size: 13px;
+          font-weight: 600;
+          margin-bottom: 25px;
+        }
+
+        .community-box {
+          background: #f9fafb;
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
+          padding: 18px;
+          margin: 24px 0;
+        }
+
+        .community-box p {
+          margin-bottom: 8px;
+          font-size: 14px;
+        }
+
+        .community-name {
+          font-size: 22px;
+          font-weight: 700;
+          margin-bottom: 8px;
+          color: #111827;
+        }
+
+        .timeline {
+          background: #eff6ff;
+          border: 1px solid #bfdbfe;
+          border-radius: 14px;
+          padding: 18px;
+          margin-top: 25px;
+        }
+
+        .timeline h3 {
+          color: #1d4ed8;
+          margin-bottom: 12px;
+          font-size: 16px;
+        }
+
+        .timeline ul {
+          padding-left: 18px;
+        }
+
+        .timeline li {
+          margin-bottom: 10px;
+          color: #374151;
+          font-size: 14px;
+        }
+
+        .buttons {
+          margin-top: 32px;
+          text-align: center;
+        }
+
+        .btn {
+          display: inline-block;
+          padding: 14px 24px;
+          border-radius: 12px;
+          text-decoration: none;
+          font-weight: 600;
+          font-size: 14px;
+          margin: 6px;
+        }
+
+        .btn-primary {
+          background: #2563eb;
+          color: white !important;
+        }
+
+        .btn-secondary {
+          background: #eef2ff;
+          color: #4338ca !important;
+        }
+
+        .about {
+          margin-top: 35px;
+          padding-top: 28px;
+          border-top: 1px solid #e5e7eb;
+        }
+
+        .about h3 {
+          font-size: 18px;
+          margin-bottom: 10px;
+        }
+
+        .about p {
+          color: #4b5563;
+          font-size: 14px;
+        }
+
+        .footer {
+          text-align: center;
+          padding: 28px 20px;
+          color: #6b7280;
+          font-size: 12px;
+        }
+
+        .footer a {
+          color: #2563eb;
+          text-decoration: none;
+        }
+
+        @media only screen and (max-width: 600px) {
+          .hero {
+            padding: 40px 20px;
+          }
+
+          .content {
+            padding: 28px 20px;
+          }
+
+          .hero h1 {
+            font-size: 26px;
+          }
+
+          .btn {
+            display: block;
+            width: 100%;
+          }
+        }
+      </style>
+    </head>
+
+    <body>
+      <div class="wrapper">
+        <div class="card">
+
+          <div class="hero">
+            <h1>🎉 Welcome to CommDesk</h1>
+            <p>Your community has been successfully submitted for approval.</p>
+          </div>
+
+          <div class="content">
+
+            <div class="badge">
+              Community Submission Received
             </div>
-            <div class="content">
-              <p>Hello,</p>
-              <p>Great news! Your community <strong>"${data.communityName}"</strong> has been successfully created on CommDesk.</p>
-              
-              <div class="highlight">
-                <strong>📧 Community Email:</strong> ${data.email}
+
+            <p>Hello,</p>
+
+            <p style="margin-top: 14px;">
+              Congratulations! Your community has officially joined the CommDesk platform.
+              We're excited to help you build, manage, and grow your community experience.
+            </p>
+
+            <div class="community-box">
+              <div class="community-name">
+                ${data.communityName}
               </div>
 
-              <p><strong>Next Steps:</strong></p>
-              <ul>
-                <li>Your community account is pending approval</li>
-                <li>Our team will review and activate it shortly</li>
-                <li>You'll receive a confirmation email once approved</li>
-                <li>Start inviting members to join your community</li>
-              </ul>
+              <p><strong>Community Email:</strong> ${data.email}</p>
 
               ${
                 data.website
-                  ? `<p><strong>Community Website:</strong> <a href="${data.website}">${data.website}</a></p>`
+                  ? `
+                <p>
+                  <strong>Website:</strong>
+                  <a href="${data.website}" target="_blank">
+                    ${data.website}
+                  </a>
+                </p>
+              `
                   : ""
               }
+            </div>
 
-              <a href="${process.env.APP_URL || "https://commdesk.com"}/dashboard" class="button">Go to Dashboard</a>
+            <div class="timeline">
+              <h3>⏳ What Happens Next?</h3>
 
-              <p style="margin-top: 30px; padding-top: 15px; border-top: 1px solid #ddd; font-size: 12px; color: #666;">
-                If you didn't create this community, please contact support immediately.
+              <ul>
+                <li>Your community is currently under review by the CommDesk team.</li>
+                <li>Approval usually takes less than <strong>24 hours</strong>.</li>
+                <li>Once approved, you'll receive another email confirmation.</li>
+                <li>After approval, you can invite members and start managing your community dashboard.</li>
+              </ul>
+            </div>
+
+            <div class="buttons">
+              <a
+                href="${process.env.APP_URL || "https://commdesk.com"}/dashboard"
+                class="btn btn-primary"
+              >
+                Open Dashboard
+              </a>
+
+              <a
+                href="${process.env.APP_URL || "https://commdesk.com"}/community-guidelines"
+                class="btn btn-secondary"
+              >
+                Community Rules
+              </a>
+            </div>
+
+            <div class="about">
+              <h3>What is CommDesk?</h3>
+
+              <p>
+                CommDesk is a modern community management platform built for organizations,
+                creators, teams, and online communities. Manage members, communication,
+                events, permissions, and workflows — all in one place.
               </p>
             </div>
-            <div class="footer">
-              <p>&copy; 2026 CommDesk. All rights reserved.</p>
-              <p>This is an automated email. Please do not reply.</p>
-            </div>
+
           </div>
-        </body>
-      </html>
-    `,
+
+          <div class="footer">
+            <p>
+              © 2026 CommDesk. All rights reserved.
+            </p>
+
+            <p style="margin-top: 8px;">
+              This is an automated email. Please do not reply.
+            </p>
+
+            <p style="margin-top: 8px;">
+              Need help?
+              <a href="${process.env.APP_URL || "https://commdesk.com"}/support">
+                Contact Support
+              </a>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </body>
+  </html>
+  `,
+
     text: `
-Community Created Successfully!
+Welcome to CommDesk 🚀
 
-Hello,
+Your community "${data.communityName}" has been submitted successfully.
 
-Great news! Your community "${data.communityName}" has been successfully created on CommDesk.
+Community Email:
+${data.email}
 
-Community Email: ${data.email}
+${data.website ? `Website: ${data.website}` : ""}
 
-Next Steps:
-- Your community account is pending approval
-- Our team will review and activate it shortly
-- You'll receive a confirmation email once approved
-- Start inviting members to join your community
+What happens next?
+- Your community is under review
+- Approval usually takes less than 24 hours
+- You’ll receive another email once approved
+- Then you can start inviting members and managing your dashboard
 
-${data.website ? `Community Website: ${data.website}` : ""}
+Dashboard:
+${process.env.APP_URL || "https://commdesk.com"}/dashboard
 
-Go to Dashboard: ${process.env.APP_URL || "https://commdesk.com"}/dashboard
+Community Rules:
+${process.env.APP_URL || "https://commdesk.com"}/community-guidelines
 
-If you didn't create this community, please contact support immediately.
+About CommDesk:
+CommDesk is a modern platform for managing communities, teams, members, communication, and workflows in one place.
 
-© 2026 CommDesk. All rights reserved.
-This is an automated email. Please do not reply.
-    `,
+© 2026 CommDesk
+This is an automated email.
+  `,
   }),
 
   /**

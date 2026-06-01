@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export type CommunitySchema = {
-  OwnerID?: mongoose.Types.ObjectId;
+  OwnerID?: String; // Reference to the User who owns the community
   CommunityName: string;
   Bio: string;
   Slug: string;

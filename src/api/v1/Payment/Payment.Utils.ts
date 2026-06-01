@@ -6,7 +6,6 @@ import { env_Constant } from "../../../constants/env.constant";
 class PaymentUtils {
   async createCashFreeOrder(orderRequest: CashFreeOrderRequest) {
     try {
-       
       const response = await axios.post(
         `${env_Constant.CashFree_Url}/orders`,
         {
@@ -22,9 +21,6 @@ class PaymentUtils {
             return_url: orderRequest.returnUrl,
             notify_url: orderRequest.notifyUrl,
           },
-       
-          
-          
         },
         {
           headers: {

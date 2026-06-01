@@ -33,6 +33,7 @@ describe("Get Default Permissions for Role", () => {
       await permissionService.get_DefaultPermissionsForRole(role);
 
     expect(permissions).toBeDefined();
+    expect(Array.isArray(permissions)).toBe(true);
   });
 
   it("should return valid permissions for ORGANIZATION role", async () => {
