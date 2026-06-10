@@ -4,7 +4,9 @@ import { CashFreeOrderRequest } from "./Payment.Types";
 import { env_Constant } from "../../../constants/env.constant";
 
 class PaymentUtils {
-  async createCashFreeOrder(orderRequest: CashFreeOrderRequest) {
+  async createCashFreeOrder(
+    orderRequest: CashFreeOrderRequest,
+  ): Promise<unknown> {
     try {
       const response = await axios.post(
         `${env_Constant.CashFree_Url}/orders`,
@@ -17,10 +19,10 @@ class PaymentUtils {
             customer_email: orderRequest.customerEmail,
             customer_name: orderRequest.customerName,
           },
-          order_meta: {
-            return_url: orderRequest.returnUrl,
-            notify_url: orderRequest.notifyUrl,
-          },
+          // order_meta: {
+          //   return_url: orderRequest.returnUrl,
+          //   notify_url: orderRequest.notifyUrl,
+          // },
         },
         {
           headers: {
@@ -35,6 +37,27 @@ class PaymentUtils {
       return response.data;
     } catch (error) {
       console.error("Error creating CashFree order:", error);
+      throw error;
+    }
+  }
+
+  async fetchOrderDetails(orderId: string): Promise<unknown> {
+    try {
+      const response = await axios.get(
+        `${env_Constant.CashFree_Url}/orders/${orderId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-client-id": env_Constant.CashFresh_API_KEY,
+            "x-client-secret": env_Constant.CashFresh_API_SECRET,
+            "x-api-version": "2022-09-01",
+          },
+        },
+      );
+      console.log("CashFree order details fetched successfully:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching CashFree order details:", error);
       throw error;
     }
   }

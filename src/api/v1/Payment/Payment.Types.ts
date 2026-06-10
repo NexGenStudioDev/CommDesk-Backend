@@ -5,6 +5,6 @@ export type CashFreeOrderRequest = {
   customerName: string;
   customerEmail: string;
   customerPhone: string;
-  returnUrl: string;
-  notifyUrl: string;
+  // returnUrl: string;
+  // notifyUrl: string;
 };
