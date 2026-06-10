@@ -23,6 +23,9 @@ class EmailConsumers {
         try {
           await EmailPublisher.sendCommunitySignupEmail(payload);
 
+          // This line is responsible for acknowledging the message after successful processing.
+          await QueueService.ackMessage(message);
+
           PinoLogger.info(
             {
               queue: QueueNames.COMMUNITY_SIGNUP,
@@ -40,6 +43,7 @@ class EmailConsumers {
             },
             "❌ Error processing community signup",
           );
+          await QueueService.nackMessage(message);
         }
       },
     );
@@ -85,6 +89,7 @@ class EmailConsumers {
             },
             "❌ Error processing account banned",
           );
+          await QueueService.nackMessage(message);
         }
       },
     );
@@ -116,6 +121,8 @@ class EmailConsumers {
             text: forgotPasswordContent.text,
           });
 
+          await QueueService.ackMessage(message);
+
           PinoLogger.info(
             {
               queue: QueueNames.FORGOT_PASSWORD,
@@ -132,6 +139,7 @@ class EmailConsumers {
             },
             "❌ Error processing forgot password",
           );
+          await QueueService.nackMessage(message);
         }
       },
     );

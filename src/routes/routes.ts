@@ -7,7 +7,17 @@ const route = Router();
 
 import { AuthRoute } from "../api/v1/Auth/Auth.routes";
 import { MemberRoutes } from "../api/v1/Member/Member.routes";
+import { PermissionRoutes } from "../api/v1/Permission/Permission.routes";
+import { communityRouter } from "../api/v1/Community/Community.Router";
+import { paymentRouter } from "../api/v1/Payment/Payment.routes";
 
-route.use("/api/v1", AuthRoute, MemberRoutes);
+route.use(
+  "/api/v1",
+  AuthRoute,
+  MemberRoutes,
+  PermissionRoutes,
+  communityRouter,
+  paymentRouter,
+);
 
 export { route };

@@ -1,0 +1,31 @@
+export enum EventMode {
+  ONLINE = "ONLINE",
+  OFFLINE = "OFFLINE",
+  HYBRID = "HYBRID",
+}
+
+export enum RewardType {
+  CASH = "CASH",
+  CREDIT = "CREDIT",
+  SWAG = "SWAG",
+  HIRING = "HIRING",
+  INTERNSHIP = "INTERNSHIP",
+}
+
+export enum EventVisibility {
+  PUBLIC = "PUBLIC",
+  PRIVATE = "PRIVATE",
+  UNLISTED = "UNLISTED",
+}
+
+export enum EventStatus {
+  DRAFT = "DRAFT",
+  REVIEW = "REVIEW",
+  PUBLISHED = "PUBLISHED",
+  REGISTRATION_OPEN = "REGISTRATION_OPEN",
+  REGISTRATION_CLOSED = "REGISTRATION_CLOSED",
+  LIVE = "LIVE",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+  ARCHIVED = "ARCHIVED",
+}

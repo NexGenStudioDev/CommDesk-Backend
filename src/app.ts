@@ -4,6 +4,7 @@ const app = express();
 import { route } from "./routes/routes";
 import rateLimit from "express-rate-limit";
 import { env_Constant } from "./constants/env.constant";
+import cors from "cors";
 
 app.use(express.json());
 
@@ -16,6 +17,13 @@ const limiter = rateLimit({
   standardHeaders: "draft-8", // Returns rate limit info in headers
   legacyHeaders: false,
 });
+
+app.use(
+  cors({
+    origin: isProduction ? "https://commdesk.app" : "http://localhost:1420",
+    credentials: true,
+  }),
+);
 
 app.use(limiter);
 

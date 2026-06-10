@@ -33,6 +33,26 @@ services:
       retries: 5
       start_period: 20s
 
+  mariadb:
+    image: mariadb
+    container_name: commdesk-mariadb
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: example
+      MARIADB_DATABASE: commdesk
+      MARIADB_USER: commdeskuser
+      MARIADB_PASSWORD: commdeskpass
+    ports:
+      - "3306:3306"
+    networks:
+      - commdesk-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
   mongo-express:
     image: mongo-express
     container_name: commdesk-mongo-express
