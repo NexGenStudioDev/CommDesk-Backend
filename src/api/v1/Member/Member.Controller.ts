@@ -104,6 +104,10 @@ class MemberController {
       return SendResponse.ErrorResponse(res, errorData, message);
     }
   };
+
+
+
+  
 }
 
 export const memberController = new MemberController();
