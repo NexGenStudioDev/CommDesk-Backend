@@ -54,7 +54,10 @@ class PaymentUtils {
           },
         },
       );
-      console.log("CashFree order details fetched successfully:", response.data);
+      console.log(
+        "CashFree order details fetched successfully:",
+        response.data,
+      );
       return response.data;
     } catch (error) {
       console.error("Error fetching CashFree order details:", error);

@@ -7,7 +7,6 @@ import { env_Constant } from "../../../constants/env.constant";
 class PaymentController {
   async createPaymentIntent(req: Request, res: Response) {
     try {
-
       let OrderId = `order_${Date.now()}`;
 
       let {
@@ -17,15 +16,12 @@ class PaymentController {
         order_amount,
         // returnUrl,
         // notifyUrl,
-
-
       } = await CreateCashFreeOrderValidate.parseAsync({
         ...req.body,
         orderId: OrderId,
         // returnUrl: `${env_Constant.FRONTEND_URL}/billing/add-funds/response`,
         // notifyUrl: `${env_Constant.BACKEND_URL}/api/v1/payment/payment-notification`,
       });
-
 
       const paymentIntent = await paymentUtils.createCashFreeOrder({
         customerName,
@@ -49,46 +45,37 @@ class PaymentController {
     }
   }
 
-
   async paymentNotification(req: Request, res: Response) {
-  try {
-    const payload = req.body;
+    try {
+      const payload = req.body;
 
-    console.log("Cashfree Webhook:", payload);
+      console.log("Cashfree Webhook:", payload);
 
-    // Verify signature
+      // Verify signature
 
-    // Check payment status
+      // Check payment status
 
-    // Update payment record
+      // Update payment record
 
-    // Credit wallet
+      // Credit wallet
 
-    return res.status(200).json({
-      success: true,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-    });
+      return res.status(200).json({
+        success: true,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+      });
+    }
   }
-}
 
+  async verifyPayment(req: Request, res: Response) {
+    const { orderId } = req.params;
 
-async verifyPayment(req: Request, res: Response) {
-  const { orderId } = req.params;
+    const result = await paymentUtils.fetchOrderDetails(orderId);
 
-  const result =
-    await paymentUtils.fetchOrderDetails(orderId);
-
-  return SendResponse.SuccessResponse(
-    res,
-    result,
-    "Payment verified"
-  );
-}
-
-
+    return SendResponse.SuccessResponse(res, result, "Payment verified");
+  }
 }
 
 export default new PaymentController();

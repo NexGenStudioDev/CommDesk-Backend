@@ -4,16 +4,16 @@
 
 Build a highly reliable, scalable, fault-tolerant payment infrastructure capable of handling:
 
-* Wallet Top-ups
-* Membership Payments
-* Event Registrations
-* Sponsorship Payments
-* Subscription Billing
-* Refunds
-* Invoice Generation
-* Automated Reconciliation
-* Audit Logs
-* Financial Reporting
+- Wallet Top-ups
+- Membership Payments
+- Event Registrations
+- Sponsorship Payments
+- Subscription Billing
+- Refunds
+- Invoice Generation
+- Automated Reconciliation
+- Audit Logs
+- Financial Reporting
 
 ---
 
@@ -37,10 +37,10 @@ Email / SMS / Push
 
 External Systems:
 
-* Cashfree
-* Razorpay
-* Stripe
-* GST Invoice Provider
+- Cashfree
+- Razorpay
+- Stripe
+- GST Invoice Provider
 
 ---
 
@@ -50,16 +50,16 @@ External Systems:
 
 Frontend can:
 
-* Create Payment Intent
-* Open Checkout
-* View Status
+- Create Payment Intent
+- Open Checkout
+- View Status
 
 Frontend CANNOT:
 
-* Mark Payment Successful
-* Credit Wallet
-* Trigger Refund
-* Update Ledger
+- Mark Payment Successful
+- Credit Wallet
+- Trigger Refund
+- Update Ledger
 
 Only backend performs financial state changes.
 
@@ -330,10 +330,10 @@ Consumers
 
 Benefits:
 
-* Retry
-* Async processing
-* Fault tolerance
-* Scalability
+- Retry
+- Async processing
+- Fault tolerance
+- Scalability
 
 ---
 
@@ -454,7 +454,7 @@ Idempotency-Key:
 Example:
 
 ```ts
-crypto.randomUUID()
+crypto.randomUUID();
 ```
 
 Prevent duplicate payments.
